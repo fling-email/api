@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Factories;
 
 use App\Models\User;
@@ -15,15 +17,16 @@ class UserFactory extends Factory
     protected $model = User::class;
 
     /**
-     * Define the model's default state.
+     * Define the model"s default state.
      *
      * @return array
+     * @phan-return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,
+            "name" => $this->faker->name,
+            "email" => $this->faker->unique()->safeEmail,
         ];
     }
 }

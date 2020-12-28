@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use Illuminate\Auth\Access\AuthorizationException;
@@ -35,6 +37,8 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        // Sentry reporting will go here.
+
         parent::report($exception);
     }
 
@@ -49,6 +53,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // Customised reponses to some exceptions will go here.
+
         return parent::render($request, $exception);
     }
 }
