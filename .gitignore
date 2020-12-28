@@ -1,0 +1,13 @@
+# 3rd party
+/vendor
+
+# Private files
+/.env
+
+# Cache
+/.phpunit.result.cache
+
+# Vim
+*.swp
+*.swo
+/Session.vim
