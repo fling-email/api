@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use App\Exceptions\UnauthorisedException;
 
 class Authenticate
 {
@@ -35,10 +35,10 @@ class Authenticate
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, \Closure $next, $guard = null)
     {
         if ($this->auth->guard($guard)->guest()) {
-            return \response('Unauthorized.', 401);
+            throw new UnauthorisedException("You are not permitted to use this resource");
         }
 
         return $next($request);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class LoginToken extends Model
 {
     /**
@@ -36,4 +38,14 @@ class LoginToken extends Model
     protected $dates = [
         "expires_at",
     ];
+
+    /**
+     * Gets the relation to the user
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

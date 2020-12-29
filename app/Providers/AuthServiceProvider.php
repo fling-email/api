@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Models\User;
+use App\Models\LoginToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -38,7 +39,17 @@ class AuthServiceProvider extends ServiceProvider
             return null;
         }
 
-        return User::query()->where("api_token", $request->input("api_token"))
-                   ->first();
+        $login_token = LoginToken::query()
+            ->where("token", $token)
+            ->first();
+
+        if ($login_token === null) {
+            return null;
+        }
+
+        $login_token->expires_at = (new \DateTime())->modify("+1 hour");
+        $login_token->save();
+
+        return $login_token->user;
     }
 }

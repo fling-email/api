@@ -34,6 +34,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string[]
      */
     protected $hidden = [
+        "id",
+        "organisation_id",
         "password_hash",
     ];
 

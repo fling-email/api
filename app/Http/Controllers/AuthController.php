@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Models\LoginToken;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+
+class AuthController extends Controller
+{
+    /**
+     * Handles GET requests to the /auth endpoint
+     *
+     * @param Request The request
+     *
+     * @return JsonResponse
+     */
+    public function __invoke(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        $token = LoginToken::query()
+            ->where("token", $request->bearerToken())
+            ->first();
+
+        return \response()->json([
+            "user" => $user,
+            "token" => $token,
+        ]);
+    }
+}
