@@ -17,6 +17,7 @@ abstract class Routes
      * @phan-var list<class-string<Routes>>
      */
     private static array $routes = [
+        MonitoringRoutes::class,
         AccountRoutes::class,
     ];
 

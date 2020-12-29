@@ -57,9 +57,7 @@ function createApp(): \Laravel\Lumen\Application
     /**
      * Load The Application Routes
      */
-    $app->router->group([
-        "namespace" => "App\Http\Controllers",
-    ], function (Laravel\Lumen\Routing\Router $router) {
+    $app->router->group([], function (Laravel\Lumen\Routing\Router $router) {
         foreach (App\Routes\Routes::all() as $routes_class) {
             $routes = new $routes_class($router);
             $routes->register();
