@@ -45,6 +45,7 @@ function createApp(): \Laravel\Lumen\Application
      */
     $app->routeMiddleware([
         "auth" => App\Http\Middleware\Authenticate::class,
+        "validate_schemas" => App\Http\Middleware\SchemaValidator::class,
     ]);
 
     /**
@@ -57,12 +58,10 @@ function createApp(): \Laravel\Lumen\Application
     /**
      * Load The Application Routes
      */
-    $app->router->group([], function (Laravel\Lumen\Routing\Router $router) {
-        foreach (App\Routes\Routes::all() as $routes_class) {
-            $routes = new $routes_class($router);
-            $routes->register();
-        }
-    });
+    foreach (\App\Http\Controllers\Controller::all() as $controller_class) {
+        $controller_route = $controller_class::getRoute();
+        $controller_route->register($app->router);
+    }
 
     return $app;
 }

@@ -14,8 +14,12 @@ use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
+    public static ?string $method = "post";
+    public static ?string $path = "/auth";
+    public static bool $auth = false;
+
     /**
-     * Handles POST requests to the /auth endpoint
+     * Handles post requests to the /auth endpoint
      *
      * @param Request $request The request
      *

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Swaggest\JsonSchema\InvalidValue;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -57,6 +58,17 @@ class Handler extends ExceptionHandler
             return \response()->json(
                 $exception->json(),
                 $exception->status(),
+            );
+        }
+
+        if ($exception instanceof InvalidValue) {
+            return response()->json(
+                [
+                    "status" => 400,
+                    "error" => "Bad Request",
+                    "message" => $exception->getMessage(),
+                ],
+                400
             );
         }
 
