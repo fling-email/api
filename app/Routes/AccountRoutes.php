@@ -13,6 +13,6 @@ class AccountRoutes extends Routes
      */
     public function register(): void
     {
-        $this->router->get("/", fn (): string => "Test");
+        //
     }
 }

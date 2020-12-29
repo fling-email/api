@@ -18,6 +18,7 @@ abstract class Routes
      */
     private static array $routes = [
         MonitoringRoutes::class,
+        AuthRoutes::class,
         AccountRoutes::class,
     ];
 

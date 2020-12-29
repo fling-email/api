@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use App\Models\LoginToken;
+use App\Exceptions\ForbiddenException;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class LoginController extends Controller
+{
+    /**
+     * Handles POST requests to the /auth endpoint
+     *
+     * @param Request $request The request
+     *
+     * @return JsonResponse
+     */
+    public function __invoke(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            "username" => ["required"],
+            "password" => ["required"],
+        ]);
+
+        $user = User::query()
+            ->where("username", $request->input("username"))
+            ->first();
+
+        if (!$this->checkPasswordHash($request->input("password"), $user)) {
+            throw new ForbiddenException("Incorrect username or password");
+        }
+
+        $token = LoginToken::create([
+            "uuid" => (string) Str::uuid(),
+            "user_id" => $user->id,
+            "expires_at" => new \DateTime(),
+            "token" => Str::random(60),
+        ]);
+
+        return \response()->json($token);
+    }
+
+    /**
+     * Checks a value against the users password hash. Also updates the hash
+     * in the database if it's outdated.
+     *
+     * @param string $password The password to check
+     * @param ?User $user The user to get the hash from
+     *
+     * @retuen boolean If the password matched the hash
+     */
+    private function checkPasswordHash(string $password, ?User $user): bool
+    {
+        // User should be found
+        if ($user === null) {
+            return false;
+        }
+
+        // Password should be right
+        if (!Hash::check($password, $user->password_hash)) {
+            return false;
+        }
+
+        // Account and organisation should be enabled
+        if (!(bool) $user->enabled || !(bool) $user->organisation->enabled) {
+            return false;
+        }
+
+        // Update the hash if required
+        if (Hash::needsRehash($user->password_hash)) {
+            $user->password_hash = Hash::make($password);
+            $user->save();
+        }
+
+        return true;
+    }
+}

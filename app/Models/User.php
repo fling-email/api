@@ -9,6 +9,8 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -32,6 +34,36 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var string[]
      */
     protected $hidden = [
-        "password",
+        "password_hash",
     ];
+
+    /**
+     * List of type conversions for attributes
+     *
+     * @var array
+     * @phan-var array<string, string>
+     */
+    protected $casts = [
+        "enabled" => "boolean",
+    ];
+
+    /**
+     * Gets the relation to the organisation
+     *
+     * @return BelongsTo
+     */
+    public function organisation(): BelongsTo
+    {
+        return $this->belongsTo(Organisation::class);
+    }
+
+    /**
+     * Gets the relation to the login tokens
+     *
+     * @return HasMany
+     */
+    public function loginTokens(): HasMany
+    {
+        return $this->hasMany(LoginToken::class);
+    }
 }

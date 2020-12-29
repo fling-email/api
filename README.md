@@ -14,3 +14,15 @@ edited in realtime.
 ```
 build_scripts/start.sh
 ```
+
+To run the database migrations
+
+```
+build_scripts/local_exec.sh php artisan migrate:fresh
+```
+
+You can then populate the database with generated test data
+
+```
+build_scripts/local_exec.sh php artisan db:seed
+```

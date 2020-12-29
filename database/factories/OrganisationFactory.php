@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\Models\Model;
+use App\Models\Organisation;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 
-class UserFactory extends Factory
+class OrganisationFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
@@ -17,7 +15,7 @@ class UserFactory extends Factory
      * @var string
      * @phan-var class-string<Model>
      */
-    protected $model = User::class;
+    protected $model = Organisation::class;
 
     /**
      * Define the model's default state.
@@ -34,10 +32,7 @@ class UserFactory extends Factory
             "updated_at" => $created_at,
             "deleted_at" => null,
             "uuid" => $this->faker->uuid,
-            "name" => $this->faker->name,
-            "username" => $this->faker->unique()->username,
-            "email_address" => $this->faker->unique()->safeEmail,
-            "password_hash" => Hash::make("secret"),
+            "name" => $this->faker->company,
             "enabled" => true,
         ];
     }
