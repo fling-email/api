@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker build -t fling/api:latest .
+docker build -t flingemail/api:latest .

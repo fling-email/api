@@ -4,8 +4,9 @@
 # Private files
 /.env
 
-# Cache
+# Cache and log files
 /.phpunit.result.cache
+/telepresence.log
 
 # Vim
 *.swp
