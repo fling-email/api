@@ -39,7 +39,7 @@ class LoginController extends Controller
         $token = LoginToken::create([
             "uuid" => (string) Str::uuid(),
             "user_id" => $user->id,
-            "expires_at" => new \DateTime(),
+            "expires_at" => (new \DateTime())->modify("+1 hour"),
             "token" => Str::random(60),
         ]);
 

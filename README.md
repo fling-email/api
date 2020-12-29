@@ -26,3 +26,26 @@ You can then populate the database with generated test data
 ```
 build_scripts/local_exec.sh php artisan db:seed
 ```
+
+## Testing
+
+PHPUnit tests are run using a local database independant of the one hosted by
+minikube. This makes it easier for CI servers.
+
+To prepare the test environment run
+
+```
+build_scripts/prepare_test.sh
+```
+
+Run the tests using the composer script
+
+```
+build_scripts/test_exec.sh vendor/bin/phpunit
+```
+
+Once done cleanup the test environment
+
+```
+build_scripts/teardown_test.sh
+```
