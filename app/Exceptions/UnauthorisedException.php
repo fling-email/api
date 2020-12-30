@@ -15,19 +15,4 @@ class UnauthorisedException extends AppException
     {
         return 401;
     }
-
-    /**
-     * Gets the json data for this exception
-     *
-     * @return array
-     * @phan-return array<string, mixed>
-     */
-    public function json(): array
-    {
-        return [
-            "status" => $this->status(),
-            "error" => "Unauthorized",
-            "message" => $this->getMessage(),
-        ];
-    }
 }

@@ -15,19 +15,4 @@ class InternalServerErrorException extends AppException
     {
         return 500;
     }
-
-    /**
-     * Gets the json data for this exception
-     *
-     * @return array
-     * @phan-return array<string, mixed>
-     */
-    public function json(): array
-    {
-        return [
-            "status" => $this->status(),
-            "error" => "Internal Server Error",
-            "message" => $this->getMessage(),
-        ];
-    }
 }

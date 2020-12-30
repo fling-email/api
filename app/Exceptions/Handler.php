@@ -9,8 +9,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Swaggest\JsonSchema\InvalidValue;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -36,7 +34,7 @@ class Handler extends ExceptionHandler
      *
      * @throws \Exception
      */
-    public function report(Throwable $exception)
+    public function report(\Throwable $exception)
     {
         // Sentry reporting will go here.
 
@@ -52,23 +50,12 @@ class Handler extends ExceptionHandler
      *
      * @throws \Throwable
      */
-    public function render($request, Throwable $exception)
+    public function render($request, \Throwable $exception)
     {
         if ($exception instanceof AppException) {
             return \response()->json(
                 $exception->json(),
                 $exception->status(),
-            );
-        }
-
-        if ($exception instanceof InvalidValue) {
-            return response()->json(
-                [
-                    "status" => 400,
-                    "error" => "Bad Request",
-                    "message" => $exception->getMessage(),
-                ],
-                400
             );
         }
 

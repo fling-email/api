@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Laravel\Lumen\Routing\Controller as BaseController;
-use Laravel\Lumen\Routing\Router;
 use App\Exceptions\InternalServerErrorException;
 use App\Http\Controllers\Controller;
 use App\Http\Routes\ControllerRoute;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Swaggest\JsonSchema\Schema;
 
 abstract class Controller extends BaseController
 {
@@ -58,5 +58,51 @@ abstract class Controller extends BaseController
     public static function getRoute(): ControllerRoute
     {
         return new ControllerRoute(\get_called_class());
+    }
+
+    /**
+     * Gets the request schema for this controller
+     *
+     * @return Schema
+     */
+    public static function getRequestSchema(): Schema
+    {
+        $schema_file_path = static::getSchemaFilePath("_request");
+        $schema_file_data = \json_decode(\file_get_contents($schema_file_path));
+
+        return Schema::import($schema_file_data);
+    }
+
+    /**
+     * Gets the response schema for this controller
+     *
+     * @return Schema
+     */
+    public static function getResponseSchema(): Schema
+    {
+        $schema_file_path = static::getSchemaFilePath("_response");
+        $schema_file_data = \json_decode(\file_get_contents($schema_file_path));
+
+        return Schema::import($schema_file_data);
+    }
+
+    /**
+     * Gets the path to a schema json file
+     *
+     * @param string $suffix Suffix to append to the class in the filename
+     *
+     * @return string
+     */
+    private static function getSchemaFilePath(string $suffix): string
+    {
+        $controller_base_name = Str::substr(
+            \get_called_class(),
+            Str::length(__NAMESPACE__) + 1
+        );
+
+        return __DIR__
+            . "/../../../schemas/"
+            . Str::snake($controller_base_name)
+            . "{$suffix}.json";
     }
 }

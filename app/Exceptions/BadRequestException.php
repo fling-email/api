@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-class ForbiddenException extends AppException
+class BadRequestException extends AppException
 {
     /**
      * Gets the HTTP status code for this exception
@@ -13,6 +13,6 @@ class ForbiddenException extends AppException
      */
     public function status(): int
     {
-        return 403;
+        return 400;
     }
 }

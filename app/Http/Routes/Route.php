@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Routes;
 
-use \Laravel\Lumen\Routing\Router;
+use Laravel\Lumen\Routing\Router;
 
 abstract class Route
 {

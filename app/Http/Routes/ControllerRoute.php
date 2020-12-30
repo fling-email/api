@@ -10,11 +10,14 @@ use Laravel\Lumen\Routing\Router;
 
 class ControllerRoute extends Route
 {
+    /**
+     * @phan-var class-string<Controller>
+     */
     private string $controller_class;
 
     /**
      * @param string $controller_class The controller class name
-     * @phan-return class-string<Controller>
+     * @phan-param class-string<Controller> $controller_class
      */
     public function __construct(string $controller_class)
     {
@@ -63,7 +66,7 @@ class ControllerRoute extends Route
 
         $valid_methods = ["get", "post", "patch", "put", "delete"];
 
-        if ($method === null || $path === null || !\in_array($method, $valid_methods)) {
+        if ($method === null || $path === null || !\in_array($method, $valid_methods, true)) {
             throw new InternalServerErrorException("Invalid controller route");
         }
     }

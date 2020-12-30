@@ -16,7 +16,7 @@ class AuthController extends Controller
     /**
      * Handles get requests to the /auth endpoint
      *
-     * @param Request The request
+     * @param Request $request The request
      *
      * @return JsonResponse
      */
