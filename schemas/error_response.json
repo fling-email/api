@@ -2,16 +2,23 @@
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "type": "object",
     "properties": {
-        "username": {
+        "status": {
+            "type": "integer"
+        },
+        "error": {
             "type": "string"
         },
-        "password": {
+        "message": {
             "type": "string"
+        },
+        "debug": {
+            "type": ["string", "null"]
         }
     },
     "additionalProperties": false,
     "required": [
-        "username",
-        "password"
+        "status",
+        "error",
+        "message"
     ]
 }

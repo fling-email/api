@@ -9,6 +9,7 @@ use App\Exceptions\BadRequestException;
 use App\Exceptions\InternalServerErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\Exception\ObjectException;
 
@@ -53,7 +54,13 @@ class SchemaValidator
 
         // Validate the response if it was a json type
         if ($response instanceof JsonResponse) {
-            $schema = $controller_class::getResponseSchema();
+            if ($response->getStatusCode() === 200) {
+                $schema = $controller_class::getResponseSchema();
+            } else {
+                $schema = Schema::import(\json_decode(\file_get_contents(
+                    __DIR__ . "/../../../schemas/error_response.json"
+                )));
+            }
 
             try {
                 $schema->in(\json_decode($response->getContent()));
