@@ -9,6 +9,7 @@ use App\Exceptions\BadRequestException;
 use App\Exceptions\InternalServerErrorException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\Exception\ObjectException;
@@ -32,28 +33,71 @@ class SchemaValidator
             return $next($request);
         }
 
-        // Validate the request if there should be a body
-        if (\in_array($controller_class::$method, ["post", "patch", "put"], true)) {
-            $schema = $controller_class::getRequestSchema();
-
-            try {
-                $schema->in(\json_decode($request->getContent()));
-            } catch (InvalidValue $exception) {
-                // Strip the input data from this error type. The client should
-                // know what it sent and it's not very readable to users.
-                $message = ($exception instanceof ObjectException)
-                    ? \explode(", data: {", $exception->getMessage(), 2)[0]
-                    : $exception->getMessage();
-
-                throw new BadRequestException($message);
-            }
-        }
+        $this->validateRequestSchema($controller_class, $request);
 
         // Actually do the request
         $response = $next($request);
 
+        $this->validateResponseSchema($controller_class, $response);
+
+        return $response;
+    }
+
+    /**
+     * Validates the client request against the expected json schema
+     *
+     * @param string $controller_class The controller class name
+     * @phan-param class-string<Controller> $controller_class
+     * @param Request $request The incomming request
+     *
+     * @return void
+     * @throws BadRequestException
+     */
+    private function validateRequestSchema(string $controller_class, Request $request): void
+    {
+        $should_have_body = \in_array(
+            $controller_class::$method,
+            ["post", "patch", "put"],
+            true
+        );
+
+        // Only validate requests that should have a body
+        if (!$should_have_body) {
+            return;
+        }
+
+        try {
+            $schema = $controller_class::getRequestSchema();
+            $schema->in(\json_decode($request->getContent()));
+        } catch (InvalidValue $exception) {
+            // Strip the input data from this error type. The client should
+            // know what it sent and it's not very readable to users.
+            $message = ($exception instanceof ObjectException)
+                ? Str::before($exception->getMessage(), ", data: {")
+                : $exception->getMessage();
+
+            throw new BadRequestException($message);
+        }
+    }
+
+    /**
+     * Validates the response against the expected json schema
+     *
+     * @param string $controller_class The controller class name
+     * @phan-param class-string<Controller> $controller_class
+     * @param mixed $response The backend response
+     *
+     * @return void
+     * @throws InternalServerErrorException
+     */
+    private function validateResponseSchema(string $controller_class, $response): void
+    {
         // Validate the response if it was a json type
-        if ($response instanceof JsonResponse) {
+        if (!($response instanceof JsonResponse)) {
+            return;
+        }
+
+        try {
             if ($response->getStatusCode() === 200) {
                 $schema = $controller_class::getResponseSchema();
             } else {
@@ -62,16 +106,12 @@ class SchemaValidator
                 )));
             }
 
-            try {
-                $schema->in(\json_decode($response->getContent()));
-            } catch (InvalidValue $exception) {
-                throw new InternalServerErrorException(
-                    "Backend returned an unexpected response",
-                    $exception->getMessage(),
-                );
-            }
+            $schema->in(\json_decode($response->getContent()));
+        } catch (InvalidValue $exception) {
+            throw new InternalServerErrorException(
+                "Backend returned an unexpected response",
+                $exception->getMessage(),
+            );
         }
-
-        return $response;
     }
 }
