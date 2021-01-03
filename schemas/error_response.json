@@ -13,6 +13,9 @@
         },
         "debug": {
             "type": ["string", "null"]
+        },
+        "data": {
+            "type": ["object", "null"]
         }
     },
     "additionalProperties": false,

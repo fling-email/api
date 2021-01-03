@@ -1,0 +1,17 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "properties": {
+        "user": {
+            "$ref": "object_definitions/user.json#"
+        },
+        "token": {
+            "$ref": "object_definitions/token.json#"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "user",
+        "token"
+    ]
+}

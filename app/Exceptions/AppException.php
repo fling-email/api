@@ -9,16 +9,19 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 abstract class AppException extends \Exception
 {
     protected ?string $debug;
+    protected ?array $data;
 
     /**
      * @param string $message The error message
      * @param string|null $debug More debug info about the error
+     * @param array|null $data Data to support the debug information
      */
-    public function __construct(string $message, ?string $debug = null)
+    public function __construct(string $message, ?string $debug = null, ?array $data = null)
     {
         parent::__construct($message, $this->status());
 
         $this->debug = $debug;
+        $this->data = $data;
     }
 
     /**
@@ -27,16 +30,6 @@ abstract class AppException extends \Exception
      * @return integer
      */
     abstract public function status(): int;
-
-    /**
-     * Gets more debug info about the error. This often contains technical data.
-     *
-     * @return ?string
-     */
-    public function getDebug(): ?string
-    {
-        return $this->debug;
-    }
 
     /**
      * Renders the json output for exception
@@ -56,6 +49,7 @@ abstract class AppException extends \Exception
         // informatin useful to attackers.
         if (\app("env") === "local") {
             $json["debug"] = $this->debug;
+            $json["data"] = $this->data;
         }
 
         return $json;

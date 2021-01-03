@@ -67,6 +67,11 @@ class SchemaValidator
         }
 
         try {
+            // cd into the scemas folder while validating so that relative
+            // file paths work as expected.
+            $cwd = \getcwd();
+            \chdir(__DIR__ . "/../../../schemas");
+
             $schema = $controller_class::getRequestSchema();
             $schema->in(\json_decode($request->getContent()));
         } catch (InvalidValue $exception) {
@@ -77,6 +82,8 @@ class SchemaValidator
                 : $exception->getMessage();
 
             throw new BadRequestException($message);
+        } finally {
+            \chdir($cwd);
         }
     }
 
@@ -98,6 +105,11 @@ class SchemaValidator
         }
 
         try {
+            // cd into the scemas folder while validating so that relative
+            // file paths work as expected.
+            $cwd = \getcwd();
+            \chdir(__DIR__ . "/../../../schemas");
+
             if ($response->getStatusCode() === 200) {
                 $schema = $controller_class::getResponseSchema();
             } else {
@@ -111,7 +123,12 @@ class SchemaValidator
             throw new InternalServerErrorException(
                 "Backend returned an unexpected response",
                 $exception->getMessage(),
+                [
+                    "response" => $response->getContent(),
+                ]
             );
+        } finally {
+            \chdir($cwd);
         }
     }
 }

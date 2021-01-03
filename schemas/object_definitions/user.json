@@ -1,0 +1,45 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "properties": {
+        "uuid": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "created_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": "string",
+            "format": "date-time"
+        },
+        "deleted_at": {
+            "type": ["string", "null"],
+            "format": "date-time"
+        },
+        "name": {
+            "type": "string"
+        },
+        "username": {
+            "type": "string"
+        },
+        "email_address": {
+            "type": "string"
+        },
+        "enabled": {
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "uuid",
+        "created_at",
+        "updated_at",
+        "deleted_at",
+        "name",
+        "username",
+        "email_address",
+        "enabled"
+    ]
+}
