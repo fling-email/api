@@ -11,6 +11,7 @@ class HealthControllerTest extends TestCase
     public function testGet(): void
     {
         $this->get("/health")
+            ->dontSeeJsonSchemaError()
             ->seeStatusCode(200);
     }
 }

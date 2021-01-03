@@ -19,19 +19,12 @@ class AuthControllerTest extends TestCase
             "uuid" => (string) Str::uuid(),
             "expires_at" => (new \DateTime())->modify("+1 hour"),
             "user_id" => $user->id,
-            "token" => "smshing_token",
+            "token" => \str_repeat("lol", 60 / 3),
         ]);
 
         // Avoid using $this->actingAs() here so we can test for the correct token
         $this->get("/auth", ["HTTP_Authorization" => "Bearer {$token->token}"])
-            ->seeJsonStructure([
-                "user" => [
-                    "uuid",
-                ],
-                "token" => [
-                    "uuid",
-                ],
-            ])
+            ->dontSeeJsonSchemaError()
             ->seeStatusCode(200);
     }
 }

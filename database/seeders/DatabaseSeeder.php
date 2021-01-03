@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
      * @phan-var list<class-string<Seeder>>
      */
     private $seeders = [
+        OrganisationSeeder::class,
         UsersSeeder::class,
     ];
 

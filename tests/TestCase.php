@@ -37,4 +37,27 @@ abstract class TestCase extends BaseTestCase
         $this->artisan("migrate:fresh");
         $this->artisan("db:seed");
     }
+
+    /**
+     * Checks the response to see if it looks like a json schema error
+     *
+     * @return $this
+     */
+    protected function dontSeeJsonSchemaError(): self
+    {
+        $data = $this->response->original ?? [];
+        $status = $data["status"] ?? 0;
+        $error = $data["message"] ?? "";
+
+        if ($status === 500 && $error === "Backend returned an unexpected response") {
+            $output_message = <<<MESSAGE
+                JSON Schema validation error: {$data["debug"]}
+                Response data: {$data["data"]["response"]}
+                MESSAGE;
+
+            $this->assertTrue(false, $output_message);
+        }
+
+        return $this;
+    }
 }

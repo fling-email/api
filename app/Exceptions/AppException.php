@@ -46,8 +46,8 @@ abstract class AppException extends \Exception
         ];
 
         // Only show useful debug data when running locally as it could reveal
-        // informatin useful to attackers.
-        if (\app("env") === "local") {
+        // information useful to attackers.
+        if (\app("env") === "local" || \app("env") === "testing") {
             $json["debug"] = $this->debug;
             $json["data"] = $this->data;
         }

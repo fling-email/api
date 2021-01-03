@@ -14,6 +14,7 @@ class LoginControllerTest extends TestCase
                 "username" => "test",
                 "password" => "secret",
             ])
+            ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
             ->seeInDatabase("login_tokens", [
                 "uuid" => $this->response->json("uuid"),
@@ -29,6 +30,7 @@ class LoginControllerTest extends TestCase
                 "username" => $username,
                 "password" => $password,
             ])
+            ->dontSeeJsonSchemaError()
             ->seeJsonEquals([
                 "status" => 403,
                 "error" => "Forbidden",
