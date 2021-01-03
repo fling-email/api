@@ -10,7 +10,7 @@ class LoginControllerTest extends TestCase
 {
     public function testLogin(): void
     {
-        $this->post("/auth", [
+        $this->json("POST", "/auth", [
                 "username" => "test",
                 "password" => "secret",
             ])
@@ -26,12 +26,12 @@ class LoginControllerTest extends TestCase
      */
     public function testFailsWithWrongCredentials(string $username, string $password): void
     {
-        $this->post("/auth", [
+        $this->json("POST", "/auth", [
                 "username" => $username,
                 "password" => $password,
             ])
             ->dontSeeJsonSchemaError()
-            ->seeJsonEquals([
+            ->seeJson([
                 "status" => 403,
                 "error" => "Forbidden",
                 "message" => "Incorrect username or password",
