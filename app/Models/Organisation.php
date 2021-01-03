@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Organisation extends Model
 {
+    use SoftDeletes;
     use HasFactory;
 
     /**
@@ -29,5 +31,15 @@ class Organisation extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    /**
+     * Gets the relation to the domains
+     *
+     * @return HasMany
+     */
+    public function domains(): HasMany
+    {
+        return $this->hasMany(Domain::class);
     }
 }

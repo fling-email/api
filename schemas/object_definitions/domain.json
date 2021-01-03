@@ -14,11 +14,22 @@
             "type": "string",
             "format": "date-time"
         },
-        "expires_at": {
-            "type": "string",
+        "deleted_at": {
+            "type": ["string", "null"],
             "format": "date-time"
         },
-        "token": {
+        "name": {
+            "type": "string",
+            "format": "hostname"
+        },
+        "verification_token": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]{60}$"
+        },
+        "verified": {
+            "type": "boolean"
+        },
+        "dkim_public_key": {
             "type": "string"
         }
     },
@@ -27,7 +38,10 @@
         "uuid",
         "created_at",
         "updated_at",
-        "expires_at",
-        "token"
+        "deleted_at",
+        "name",
+        "verification_token",
+        "verified",
+        "dkim_public_key"
     ]
 }

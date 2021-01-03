@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     private $seeders = [
         OrganisationSeeder::class,
         UsersSeeder::class,
+        DomainSeeder::class,
     ];
 
     /**
