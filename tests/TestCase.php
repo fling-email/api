@@ -6,6 +6,7 @@ namespace Tests;
 
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
 use Laravel\Lumen\Application;
+use App\Models\User;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -59,5 +60,19 @@ abstract class TestCase extends BaseTestCase
         }
 
         return $this;
+    }
+
+    /**
+     * Helper method to call $this->actingAs with the test user
+     *
+     * @return $this
+     */
+    protected function actingAsTestUser(): self
+    {
+        $test_user = User::query()
+            ->where("username", "test")
+            ->first();
+
+        return $this->actingAs($test_user);
     }
 }

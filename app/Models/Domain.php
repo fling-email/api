@@ -14,6 +14,21 @@ class Domain extends Model
     use SoftDeletes;
 
     /**
+     * List of attributes that can be set by ::create()
+     *
+     * @var string[]
+     */
+    protected $fillable = [
+        "uuid",
+        "name",
+        "organisation_id",
+        "verification_token",
+        "verified",
+        "dkim_private_key",
+        "dkim_public_key",
+    ];
+
+    /**
      * List of type conversions for attributes
      *
      * @var array

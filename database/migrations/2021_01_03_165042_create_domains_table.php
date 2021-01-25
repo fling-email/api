@@ -21,7 +21,7 @@ class CreateDomainsTable extends Migration
             $table->softDeletes();
             $table->string("uuid")->unique();
             $table->foreignId("organisation_id");
-            $table->string("name")->unique();
+            $table->string("name");
             $table->string("verification_token");
             $table->boolean("verified");
             $table->text("dkim_private_key");

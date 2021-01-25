@@ -120,9 +120,13 @@ class SchemaValidator
 
             $schema->in(\json_decode($response->getContent()));
         } catch (InvalidValue $exception) {
+            $message = ($exception instanceof ObjectException)
+                ? Str::before($exception->getMessage(), ", data: {")
+                : $exception->getMessage();
+
             throw new InternalServerErrorException(
                 "Backend returned an unexpected response",
-                $exception->getMessage(),
+                $message,
                 [
                     "response" => $response->getContent(),
                 ]
