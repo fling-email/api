@@ -1,9 +1,9 @@
-FROM php:8.0.0-apache
+FROM php:8.0.3-apache
 
 WORKDIR /var/www
 
 # Add helper script to make installing php extensions easier
-ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/download/1.2.23/install-php-extensions /usr/local/bin/
 RUN chmod 0755 /usr/local/bin/install-php-extensions && sync
 
 # Install PHP extensions we need
