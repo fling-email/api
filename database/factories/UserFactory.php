@@ -39,6 +39,8 @@ class UserFactory extends Factory
             "email_address" => $this->faker->unique()->safeEmail,
             "password_hash" => Hash::make("secret"),
             "enabled" => true,
+            "email_address_verified" => true,
+            "email_address_verification_token" => $this->faker->regexify("[a-zA-Z0-9]{60}"),
         ];
     }
 }

@@ -39,6 +39,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         "id",
         "organisation_id",
         "password_hash",
+        "email_address_verification_token",
     ];
 
     /**
@@ -49,6 +50,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $casts = [
         "enabled" => "boolean",
+        "email_address_verified" => "boolean",
     ];
 
     /**
@@ -69,5 +71,35 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function loginTokens(): HasMany
     {
         return $this->hasMany(LoginToken::class);
+    }
+
+    /**
+     * Gets the relation to the users permissions
+     *
+     * @return HasMany
+     */
+    public function userPermissions(): HasMany
+    {
+        return $this->hasMany(UserPermission::class);
+    }
+
+    /**
+     * Checks if the user has a permission granted
+     *
+     * @param string $name The name of the permission
+     *
+     * @return boolean
+     */
+    public function hasPermission(string $name): bool
+    {
+        $this->load("userPermissions.permission");
+
+        foreach ($this->userPermissions as $user_permission) {
+            if ($user_permission->permission->name === $name) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

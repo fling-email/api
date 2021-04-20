@@ -16,8 +16,8 @@ class AddVerifiedFieldToUsersTables extends Migration
     public function up()
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->boolean("email_verified");
-            $table->string("email_verification_token");
+            $table->boolean("email_address_verified");
+            $table->string("email_address_verification_token");
         });
     }
 
@@ -29,8 +29,8 @@ class AddVerifiedFieldToUsersTables extends Migration
     public function down()
     {
         Schema::table("users", function (Blueprint $table) {
-            $table->dropColumn("email_verified");
-            $table->dropColumn("email_verification_token");
+            $table->dropColumn("email_address_verified");
+            $table->dropColumn("email_address_verification_token");
         });
     }
 }
