@@ -69,20 +69,7 @@ class CreateDomainController extends Controller
      */
     private function validateDomainName(string $domain_name): void
     {
-        $suffix_list = Cache::remember(
-            "public_suffix_list",
-            86400,
-            function (): array {
-                $raw_data = \file_get_contents("https://publicsuffix.org/list/public_suffix_list.dat");
-
-                return \collect(explode("\n", $raw_data))
-                    ->map(fn (string $line): string => \trim($line))
-                    ->filter(fn (string $line): bool => (
-                        $line !== "" && !Str::startsWith($line, "//")
-                    ))
-                    ->toArray();
-            }
-        );
+        $suffix_list = $this->getSuffixList();
 
         $matched_suffix_rules = \collect([]);
 
@@ -106,7 +93,7 @@ class CreateDomainController extends Controller
                     return 1;
                 }
 
-                return \substr_count($b, ".") <=> \substr_count($a, ".");;
+                return \substr_count($b, ".") <=> \substr_count($a, ".");
             }
         );
 
@@ -121,6 +108,30 @@ class CreateDomainController extends Controller
             // Exception rule means invalid domain
             throw new BadRequestException("Invalid hostname at #->properties:name");
         }
+    }
+
+    /**
+     * Gets the list of TLDs from the public suffix list, excluding private domains
+     *
+     * @return string[]
+     */
+    private function getSuffixList(): array
+    {
+        return Cache::remember(
+            "public_suffix_list",
+            86400,
+            function (): array {
+                $raw_data = \file_get_contents("https://publicsuffix.org/list/public_suffix_list.dat");
+
+                return \collect(explode("\n", $raw_data))
+                    ->map(fn (string $line): string => \trim($line))
+                    ->takeUntil("// ===BEGIN PRIVATE DOMAINS===")
+                    ->filter(fn (string $line): bool => (
+                        $line !== "" && !Str::startsWith($line, "//")
+                    ))
+                    ->toArray();
+            }
+        );
     }
 
     /**
