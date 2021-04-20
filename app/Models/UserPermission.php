@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserPermission extends Model
 {
+    protected $hidden = [
+        "id",
+        "user_id",
+        "permission_id",
+    ];
+
     /**
      * Gets the relation to the permission
      *
@@ -16,7 +22,11 @@ class UserPermission extends Model
      */
     public function permission(): HasOne
     {
-        return $this->hasOne(Permission::class);
+        return $this->hasOne(
+            Permission::class,
+            "id",
+            "permission_id",
+        );
     }
 
     /**

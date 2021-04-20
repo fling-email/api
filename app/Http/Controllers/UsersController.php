@@ -27,6 +27,8 @@ class UsersController extends Controller
             ->where("organisation_id", $user->organisation_id)
             ->get();
 
+        $users->load("userPermissions.permission");
+
         return \response()->json($users);
     }
 }

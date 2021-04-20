@@ -32,6 +32,33 @@
         },
         "enabled": {
             "type": "boolean"
+        },
+        "user_permissions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "permission": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "additionalProperties": false,
