@@ -4,14 +4,29 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Models\Model;
 use App\Models\User;
 use App\Models\LoginToken;
+use App\Models\Domain;
+use App\Models\Policy;
+use App\Policies\UserPolicy;
+use App\Policies\DomainPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
+    /**
+     * @var array
+     * @phan-var array<class-string<Model>, class-string<Policy>>
+     */
+    private array $policies = [
+        User::class => UserPolicy::class,
+        Domain::class => DomainPolicy::class,
+    ];
+
     /**
      * Boot the authentication services for the application.
      *
@@ -22,6 +37,10 @@ class AuthServiceProvider extends ServiceProvider
         Auth::viaRequest("api", fn (Request $request): ?User => (
             $this->getUserFromRequest($request)
         ));
+
+        foreach ($this->policies as $model_class => $policy_class) {
+            Gate::policy($model_class, $policy_class);
+        }
     }
 
     /**
