@@ -10,7 +10,6 @@ RUN chmod 0755 /usr/local/bin/install-php-extensions && sync
 RUN apt-get update -y \
  && install-php-extensions \
     intl \
-    mbstring \
     pdo_mysql
 
 # Configure PHP and Apache
