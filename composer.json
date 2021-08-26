@@ -4,9 +4,9 @@
     "license": "GPL-3.0-only",
     "type": "project",
     "require": {
-        "php": "^8.0",
-        "laravel/lumen-framework": "^8.0.10",
-        "swaggest/json-schema": "^0.12.31"
+        "php": "^8.0.10",
+        "laravel/lumen-framework": "^8.2.6",
+        "swaggest/json-schema": "^0.12.36"
     },
     "require-dev": {
         "fakerphp/faker": "^1.15.0",
