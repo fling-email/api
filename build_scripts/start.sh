@@ -5,7 +5,7 @@ build_scripts/build.sh
 
 # Run that image and replace the container in the cluster with a proxy
 telepresence \
-    --swap-deployment api \
+    --swap-deployment fling-email-api \
     --expose 80 \
     --docker-run \
         --rm \
