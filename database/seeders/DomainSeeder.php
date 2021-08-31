@@ -17,6 +17,15 @@ class DomainSeeder extends Seeder
      */
     public function run()
     {
+        // Create a domain we know the UUID of and that has valid verification
+        // details in DNS on the first organisation.
+        Domain::factory()->create([
+            "uuid" => "a41dfeaa-0299-47be-a5e9-77447fe6bf9f",
+            "organisation_id" => Organisation::first()->id,
+            "name" => "should-never-send.email",
+            "verification_token" => "YqvdHfqoqaDWrbWbQSEfJjyKvAPHAyGb1jgs7BKECNS6LZy7tlWnKHqBR4nS",
+        ]);
+
         foreach (Organisation::get() as $organisation) {
             for ($i = 0; $i < 2; ++$i) {
                 Domain::factory()->create([

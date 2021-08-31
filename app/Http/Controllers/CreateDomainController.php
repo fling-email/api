@@ -10,11 +10,14 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Domain;
 use App\Exceptions\BadRequestException;
+use App\Traits\GeneratesDkimKeys;
 
 class CreateDomainController extends Controller
 {
     public static ?string $method = "post";
     public static ?string $path = "/domains";
+
+    use GeneratesDkimKeys;
 
     /**
      * Handles requests for the /domains endpoint
@@ -186,29 +189,5 @@ class CreateDomainController extends Controller
             ? $matched && $checked_all
             // Normal rules just need to not not match
             : $matched;
-    }
-
-    /**
-     * Generates a new key pair to use for DKIM signing
-     *
-     * @return array
-     * @phan-return array{string, string}
-     */
-    private function generateDkimKeys(): array
-    {
-        $openssl_key = \openssl_pkey_new([
-            "digest_alg" => "sha256",
-            "private_key_bits" => 2048,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        ]);
-
-        \openssl_pkey_export($openssl_key, $private_key);
-
-        $public_key = \openssl_pkey_get_details($openssl_key)["key"];
-
-        return [
-            \trim($private_key),
-            \trim($public_key),
-        ];
     }
 }

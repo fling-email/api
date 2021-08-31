@@ -6,9 +6,12 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Domain;
+use App\Traits\GeneratesDkimKeys;
 
 class DomainFactory extends Factory
 {
+    use GeneratesDkimKeys;
+
     /**
      * The name of the factory's corresponding model.
      *
@@ -26,6 +29,7 @@ class DomainFactory extends Factory
     public function definition(): array
     {
         $created_at = $this->faker->dateTimeInInterval("-1 year", "-2 weeks");
+        [$dkim_private_key, $dkim_public_key] = $this->generateDkimKeys();
 
         return [
             "created_at" => $created_at,
@@ -35,8 +39,8 @@ class DomainFactory extends Factory
             "name" => $this->faker->domainName,
             "verification_token" => $this->faker->regexify("[a-zA-Z0-9]{60}"),
             "verified" => true,
-            "dkim_private_key" => "",
-            "dkim_public_key" => "",
+            "dkim_private_key" => $dkim_private_key,
+            "dkim_public_key" => $dkim_public_key,
         ];
     }
 }
