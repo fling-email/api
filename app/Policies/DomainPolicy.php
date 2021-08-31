@@ -6,5 +6,8 @@ namespace App\Policies;
 
 class DomainPolicy extends Policy
 {
-    //
+    public function verify(): Response
+    {
+        //
+    }
 }
