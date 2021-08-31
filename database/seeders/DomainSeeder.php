@@ -23,6 +23,7 @@ class DomainSeeder extends Seeder
             "uuid" => "a41dfeaa-0299-47be-a5e9-77447fe6bf9f",
             "organisation_id" => Organisation::first()->id,
             "name" => "should-never-send.email",
+            "verified" => false,
             "verification_token" => "YqvdHfqoqaDWrbWbQSEfJjyKvAPHAyGb1jgs7BKECNS6LZy7tlWnKHqBR4nS",
         ]);
 

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use App\Exceptions\ForbiddenException;
+use App\Exceptions\BadRequestException;
 use App\Models\Domain;
 
 class VerifyDomainController extends Controller
@@ -20,9 +23,9 @@ class VerifyDomainController extends Controller
      * @param Request $request The request
      * @param string $uuid The UUID of the domain
      *
-     * @return JsonResponse
+     * @return Response|JsonResponse
      */
-    public function __invoke(Request $request, string $uuid): JsonResponse
+    public function __invoke(Request $request, string $uuid): Response|JsonResponse
     {
         $user = $request->user();
 
@@ -31,13 +34,21 @@ class VerifyDomainController extends Controller
         // TODO
         // $this->authorize("verify", [Domain::class, $domain]);
 
-        $dns_tokens = $this->getDnsTokens($domain);
+        if ($domain->verified) {
+            throw new BadRequestException("Domain is already verified");
+        }
 
-        \dd($dns_tokens);
+        $verification_success = $this->getDnsTokens($domain)
+                                     ->contains($domain->verification_token);
 
-        //
+        if (!$verification_success) {
+            throw new BadRequestException("Domain could not be verified, check DNS records");
+        }
 
-        return \response()->json([]);
+        $domain->verified = true;
+        $domain->save();
+
+        return \response("", 201);
     }
 
     /**
@@ -45,21 +56,20 @@ class VerifyDomainController extends Controller
      *
      * @param Domain $domain The domain to get the tokens for
      *
-     * @return array[]
+     * @return Collection
+     * @phan-return Collection<string>
      */
-    private function getDnsTokens(Domain $domain): array
+    private function getDnsTokens(Domain $domain): Collection
     {
         $token_domain = "fling-verification.{$domain->name}";
 
         $txt_records = \dns_get_record($token_domain, \DNS_TXT);
 
         if ($txt_records === false) {
-            return [];
+            return \collect([]);
         }
 
-        return \array_map(
-            fn (array $dns_result): string => $dns_result["txt"],
-            $txt_records,
-        );
+        return \collect($txt_records)
+            ->map(fn (array $dns_result): string => $dns_result["txt"]);
     }
 }
