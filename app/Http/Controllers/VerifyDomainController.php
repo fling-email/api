@@ -31,8 +31,7 @@ class VerifyDomainController extends Controller
 
         $domain = Domain::where("uuid", $uuid)->first();
 
-        // TODO
-        // $this->authorize("verify", [Domain::class, $domain]);
+        $this->authorize("verify", [Domain::class, $domain]);
 
         if ($domain->verified) {
             throw new BadRequestException("Domain is already verified");
