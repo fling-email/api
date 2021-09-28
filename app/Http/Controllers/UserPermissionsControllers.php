@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\UserPermission;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\UserPermission;
 use App\Models\User;
 
 class UserPermissionsController extends Controller
