@@ -94,12 +94,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     {
         $this->load("userPermissions.permission");
 
-        foreach ($this->userPermissions as $user_permission) {
-            if ($user_permission->permission->name === $name) {
-                return true;
-            }
-        }
+        $user_permission_names = $this->userPermissions->map(
+            fn (UserPermission $user_permission): string => $user_permission->permission->name
+        );
 
-        return false;
+        return $user_permission_names->contains($name);
     }
 }

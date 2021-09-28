@@ -21,7 +21,8 @@ class DomainPolicy extends Policy
     public function verify(User $user, ?Domain $domain): Response
     {
         $can_verify = $domain !== null
-                   && $user->organisation_id === $domain->organisation_id;;
+            && $user->organisation_id === $domain->organisation_id
+            && $user->hasPermission("verify_domain");
 
         return ($can_verify)
             ? Response::allow()
