@@ -18,6 +18,7 @@ class AddInitialPermissions extends Migration
         "delete_user" => "remove user accounts",
         "block_user" => "block/unblock user account access",
         "reset_user_security" => "set user account security details",
+        "view_user_permissions" => "view permissions granted to a user",
         "grant_user_permissions" => "grant a user permissions (users cannot grant permissions that they do not have)",
 
         "create_domain" => "add a new domain name",
