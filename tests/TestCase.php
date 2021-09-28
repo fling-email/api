@@ -75,4 +75,19 @@ abstract class TestCase extends BaseTestCase
 
         return $this->actingAs($test_user);
     }
+
+    /**
+     * Asserts that some given data is somewhere in the json response
+     *
+     * @param array $expected The expected data
+     * @phan-param array<mixed>
+     *
+     * @return $this
+     */
+    protected function seeJsonSubset(array $expected): self
+    {
+        $this->response->assertJson($expected);
+
+        return $this;
+    }
 }
