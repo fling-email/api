@@ -69,11 +69,19 @@ abstract class TestCase extends BaseTestCase
      */
     protected function actingAsTestUser(): self
     {
-        $test_user = User::query()
+        return $this->actingAs($this->getTestUser());
+    }
+
+    /**
+     * Gets the User model for the test user account
+     *
+     * @return User
+     */
+    protected function getTestUser(): User
+    {
+        return User::query()
             ->where("username", "test")
             ->first();
-
-        return $this->actingAs($test_user);
     }
 
     /**
