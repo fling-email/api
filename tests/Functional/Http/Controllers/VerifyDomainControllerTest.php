@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Functional\Http\Controllers;
 
-use Tests\Testing;
+use Tests\TestCase;
 
 class VerifyDomainControllerTest extends TestCase
 {

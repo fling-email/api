@@ -8,9 +8,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Organisation;
 
-/**
- * @group current
- */
 class CreateDomainControllerTest extends TestCase
 {
     public function testCreate(): void

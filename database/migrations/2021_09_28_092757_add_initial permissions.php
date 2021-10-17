@@ -42,9 +42,9 @@ class AddInitialPermissions extends Migration
     public function up()
     {
         foreach ($this->new_permissions as $name => $description) {
-            DB::insert("permissions", [
+            DB::table("permissions")->insert([
                 "created_at" => new \DateTime(),
-                "update_at" => new \DateTime(),
+                "updated_at" => new \DateTime(),
                 "name" => $name,
                 "description" => $description,
             ]);
