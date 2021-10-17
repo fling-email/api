@@ -23,6 +23,11 @@ class VerifyDomainControllerTest extends TestCase
         // TODO
     }
 
+    public function testVerifyWithMissingDnsRecords(): void
+    {
+        // TODO
+    }
+
     public function testVerifyWithWrongDnsRecords(): void
     {
         // TODO
