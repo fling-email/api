@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Date;
 
 class AddInitialPermissions extends Migration
 {
@@ -43,8 +44,8 @@ class AddInitialPermissions extends Migration
     {
         foreach ($this->new_permissions as $name => $description) {
             DB::table("permissions")->insert([
-                "created_at" => new \DateTime(),
-                "updated_at" => new \DateTime(),
+                "created_at" => Date::now(),
+                "updated_at" => Date::now(),
                 "name" => $name,
                 "description" => $description,
             ]);

@@ -14,6 +14,7 @@ use App\Policies\DomainPolicy;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -66,7 +67,7 @@ class AuthServiceProvider extends ServiceProvider
             return null;
         }
 
-        $login_token->expires_at = (new \DateTime())->modify("+1 hour");
+        $login_token->expires_at = Date::now()->modify("+1 hour");
         $login_token->save();
 
         return $login_token->user;

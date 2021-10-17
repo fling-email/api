@@ -12,7 +12,7 @@ function createApp(): \Laravel\Lumen\Application
     (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(dirname(__DIR__)))
         ->bootstrap();
 
-    date_default_timezone_set(env("APP_TIMEZONE", "UTC"));
+    date_default_timezone_set("UTC");
 
     /**
      * Create The Application
@@ -21,6 +21,12 @@ function createApp(): \Laravel\Lumen\Application
 
     $app->withFacades();
     $app->withEloquent();
+
+    Illuminate\Support\Facades\Date::useCallable(
+        fn (mixed $date): mixed => ($date instanceof Carbon\CarbonInterface)
+            ? $date->setTimezone("UTC")
+            : $date
+    );
 
     /**
      * Register Container Bindings

@@ -1,6 +1,10 @@
-FROM php:8.0.9-apache
+FROM php:8.0.11-apache
 
 WORKDIR /var/www
+
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
+ && echo $TZ > /etc/timezone
 
 # Add helper script to make installing php extensions easier
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/download/1.2.60/install-php-extensions /usr/local/bin/

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Date;
 
 class AddUserAndDomainPermissions extends Migration
 {
@@ -47,8 +48,8 @@ class AddUserAndDomainPermissions extends Migration
     private function appendCreatedNow(array $input): array
     {
         return \array_merge($input, [
-            "created_at" => new \DateTime(),
-            "updated_at" => new \DateTime(),
+            "created_at" => Date::now(),
+            "updated_at" => Date::now(),
         ]);
     }
 

@@ -10,6 +10,7 @@ use App\Exceptions\ForbiddenException;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 
 class LoginController extends Controller
@@ -43,7 +44,7 @@ class LoginController extends Controller
         $token = LoginToken::create([
             "uuid" => (string) Str::uuid(),
             "user_id" => $user->id,
-            "expires_at" => (new \DateTime())->modify("+1 hour"),
+            "expires_at" => Date::now()->modify("+1 hour"),
             "token" => Str::random(60),
         ]);
 
