@@ -15,3 +15,4 @@
 
 # Temp files
 build_scripts/*.id
+.syncthing.*

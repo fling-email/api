@@ -1,4 +1,4 @@
-FROM php:8.0.11-apache
+FROM php:8.0.12-apache
 
 WORKDIR /var/www
 
@@ -19,6 +19,10 @@ RUN apt-get update -y \
 # Configure PHP and Apache
 ADD docker/apache2.conf /etc/apache2/apache2.conf
 ADD docker/php.ini "$PHP_INI_DIR/php.ini"
+
+# Remove default web files
+RUN rm -Rf /var/www \
+ && mkdir -p /var/www
 
 # Copy in application code
 ADD --chown=www-data:www-data . /var/www
