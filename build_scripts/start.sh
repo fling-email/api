@@ -6,7 +6,7 @@ build_scripts/build.sh
 # Run that image and replace the container in the cluster with a proxy
 telepresence \
     intercept \
-    fling-email-api \
+    fling \
     --port 80 \
     --docker-run -- \
         --rm \
