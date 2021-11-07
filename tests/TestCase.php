@@ -88,7 +88,7 @@ abstract class TestCase extends BaseTestCase
      * Asserts that some given data is somewhere in the json response
      *
      * @param array $expected The expected data
-     * @phan-param array<mixed>
+     * @phan-param array<mixed> $expected
      *
      * @return $this
      */

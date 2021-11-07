@@ -40,7 +40,7 @@ class AddUserAndDomainPermissions extends Migration
      * Helper function to append created_at and updated_at attributes with the current time to an array
      *
      * @param array $input The input fields
-     * @phan-param array<string, mixed>
+     * @phan-param array<string, mixed> $input
      *
      * @return array
      * @phan-return array<string, mixed>
@@ -67,6 +67,6 @@ class AddUserAndDomainPermissions extends Migration
                 "view_domains",
                 "create_domain",
             ])
-            ->delete();;
+            ->delete();
     }
 }

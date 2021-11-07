@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
-use App\Exceptions\ForbiddenException;
 use App\Exceptions\BadRequestException;
 use App\Models\Domain;
 

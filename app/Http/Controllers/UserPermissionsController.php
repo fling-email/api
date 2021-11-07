@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\UserPermission;
 use App\Models\User;
@@ -17,12 +16,11 @@ class UserPermissionsController extends Controller
     /**
      * Handles requests to the user permissions endpoint
      *
-     * @param Request $request The request
      * @param string $uuid The UUID of the user
      *
      * @return JsonResponse
      */
-    public function __invoke(Request $request, string $uuid): JsonResponse
+    public function __invoke(string $uuid): JsonResponse
     {
         $user = User::with("userPermissions.permission")
             ->where("uuid", $uuid)

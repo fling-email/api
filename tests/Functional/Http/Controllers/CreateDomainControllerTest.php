@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
-use App\Models\User;
 use App\Models\Organisation;
 
 class CreateDomainControllerTest extends TestCase

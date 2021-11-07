@@ -17,8 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        DB::connection()->setQueryGrammar(
-            new \App\Database\Query\Grammars\MySqlGrammar()
-        );
+        DB::connection()->setQueryGrammar(new MySqlGrammar());
     }
 }

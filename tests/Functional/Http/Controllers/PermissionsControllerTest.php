@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
+use App\Models\Permission;
 
 class PermissionsControllerTest extends TestCase
 {
@@ -15,7 +16,10 @@ class PermissionsControllerTest extends TestCase
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
             ->seeJsonSubset([
-                "data" => Permission::all->map(
+                "data" => Permission::all()->map(
+                    /**
+                     * @phan-return array<string, mixed>
+                     */
                     fn (Permission $permission): array => (
                         $permission->jsonSerialize()
                     )

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
-use App\Models\User;
 use App\Models\LoginToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;

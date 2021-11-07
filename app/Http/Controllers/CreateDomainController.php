@@ -14,10 +14,10 @@ use App\Traits\GeneratesDkimKeys;
 
 class CreateDomainController extends Controller
 {
+    use GeneratesDkimKeys;
+
     public static ?string $method = "post";
     public static ?string $path = "/domains";
-
-    use GeneratesDkimKeys;
 
     /**
      * Handles requests for the /domains endpoint

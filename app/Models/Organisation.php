@@ -7,7 +7,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * @property Collection $users
+ * @property Collection $domains
+ */
 class Organisation extends Model
 {
     use SoftDeletes;

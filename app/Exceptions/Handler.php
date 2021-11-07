@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -24,6 +25,7 @@ class Handler extends ExceptionHandler
         ValidationException::class,
     ];
 
+    // phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod.Found
     /**
      * Report or log an exception.
      *
@@ -36,7 +38,8 @@ class Handler extends ExceptionHandler
      */
     public function report(\Throwable $exception)
     {
-        // Sentry reporting will go here.
+        // phpcs:enable
+        // Sentry reporting will go here - remove the // phpcs:disable
 
         parent::report($exception);
     }
@@ -44,9 +47,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Illuminate\Http\Response|\Illuminate\Http\JsonResponse
+     * @param \Illuminate\Http\Request  $request
+     * @param \Throwable $exception
+     * @return SymfonyResponse
      *
      * @throws \Throwable
      */
