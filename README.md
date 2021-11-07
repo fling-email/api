@@ -8,9 +8,19 @@ This section assumes you have a local kubernetes deployment already running and
 working. For instructions see the Running Locally section of the readme for out
 kubernetes deployment [repo](https://github.com/fling-email/deploy-kubernetes#flingemail-kubernetes-deployment).
 
-To replace the container running in the cluster with a local one that can be
-edited in realtime.
+Make sure you have ksync installed and initialised in your cluster
+```
+ url https://ksync.github.io/gimme-that/gimme.sh | bash
+ksync init
+```
 
+Run a watch process to sync the files to the pod
+
+```
+ksync watch
+```
+
+Start the dev version of the deployment
 ```
 build_scripts/start.sh
 ```
@@ -18,13 +28,13 @@ build_scripts/start.sh
 To run the database migrations
 
 ```
-build_scripts/local_exec.sh php artisan migrate:fresh
+kubectl exec deployment/fling --container web -- php artisan migrate:fresh
 ```
 
 You can then populate the database with generated test data
 
 ```
-build_scripts/local_exec.sh php artisan db:seed
+kubectl exec deployment/fling --container web -- php artisan db:seed
 ```
 
 ## Testing

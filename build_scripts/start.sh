@@ -47,8 +47,8 @@ function teardown() {
 # Call the setup function
 setup
 
+# Call the cleanup script after the user exits logs
+trap teardown INT
+
 # Output logs from the deployment
 kubectl logs --selector app=fling,service=api --container web --follow
-
-# Call the cleanup script after the user exits logs
-teardown

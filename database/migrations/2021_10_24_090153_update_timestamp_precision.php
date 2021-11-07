@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class UpdateTimestampPrecision extends Migration
 {
@@ -45,20 +46,24 @@ class UpdateTimestampPrecision extends Migration
      */
     private function setPrecision(int $precision): void
     {
-        foreach ($this->tables as $table_name => $extra_columns) {
-            $all_columns = \array_merge(
-                ["created_at", "updated_at"],
-                $extra_columns,
-            );
+        Schema::table("organisations", function (Blueprint $table) use ($precision) {
+            $table->timestamp("created_at", $precision)->change();
+            $table->timestamp("updated_at", $precision)->change();
+            $table->timestamp("deleted_at", $precision)->change();
+        });
 
-            Schema::table(
-                $table_name,
-                function (Blueprint $table) use ($precision): void {
-                    foreach ($all_columns as $column_name) {
-                        $table->timestamp($column_name, $precision);
-                    }
-                }
-            );
-        }
+        Schema::table("users", function (Blueprint $table) use ($precision) {
+            $table->timestamp("created_at", $precision)->change();
+            $table->timestamp("updated_at", $precision)->change();
+            $table->timestamp("deleted_at", $precision)->change();
+        });
+
+        Schema::table("login_tokens", function (Blueprint $table) use ($precision) {
+            $table->timestamp("created_at", $precision)->change();
+            $table->timestamp("updated_at", $precision)->change();
+        });
+
+        // $table->dateTime()-> change doesn't recognise the change in precision as something to do
+        DB::statement("ALTER TABLE login_tokens MODIFY COLUMN expires_at DATETIME({$precision}) NOT NULL");
     }
 }
