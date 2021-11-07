@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\LoginToken;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class LogoutController extends Controller
 {
