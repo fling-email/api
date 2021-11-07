@@ -10,6 +10,7 @@ use App\Models\LoginToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;
 
+/** @group current */
 class AuthControllerTest extends TestCase
 {
     public function testGet(): void
@@ -18,8 +19,8 @@ class AuthControllerTest extends TestCase
 
         $token = LoginToken::create([
             "uuid" => (string) Str::uuid(),
-            "expires_at" => Date::now()->modify("+1 hour"),
             "user_id" => $user->id,
+            "expires_at" => Date::now()->modify("+1 hour"),
             "token" => \str_repeat("lol", 60 / 3),
         ]);
 

@@ -19,13 +19,16 @@ class LogoutControllerTest extends TestCase
 
         $token = LoginToken::create([
             "uuid" => (string) Str::uuid(),
-            "expires_at" => Date::now()->modify("+1 hour"),
             "user_id" => $user->id,
-            "token" => \str_repeat("lol", 60 / 3),
+            "expires_at" => Date::now()->modify("+1 hour"),
+            "token" => Str::random(60),
         ]);
 
         // Avoid using $this->actingAs() here so we can test for the correct token
-        $this->delete("/auth", ["HTTP_Authorization" => "Bearer {$token->token}"])
+        $this->delete(
+            uri: "/auth",
+            headers: ["HTTP_Authorization" => "Bearer {$token->token}"],
+        )
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(204)
             ->notSeeInDatabase("login_tokens", [
