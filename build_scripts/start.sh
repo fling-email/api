@@ -19,12 +19,6 @@ function setup() {
     kubectl patch deployment fling --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
     kubectl set image deployment/fling web=flingemail/api:local
 
-    # Make sure the ksync daemon is running
-    if [ ! -f ~/.ksync/daemon.pid ]; then
-        echo "Starting ksync daemon"
-        ksync watch -d
-    fi
-
     # Keep local files in sync with the container
     echo "Starting ksync job"
     ksync create --selector app=fling,service=api --name fling-api --container web $(pwd) /var/www
@@ -34,9 +28,6 @@ function teardown() {
     # Remove the ksync job
     echo "Stopping ksync job"
     ksync delete fling-api
-
-    # Note that we leave the ksync daemon running here as other projects could
-    # also be using it and there's no harm in leaving it running.
 
     # Set the imagePullPolicy and image name back to the original values
     echo "Resetting deployment changes"
