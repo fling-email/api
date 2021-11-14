@@ -100,4 +100,28 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         return $user_permission_names->contains($name);
     }
+
+    public function grantPermission(string $name): void
+    {
+        $permission = Permission::query()
+            ->where("name", $name)
+            ->firstOrFail();
+
+        $user_permission = new UserPermission();
+        $user_permission->user_id = $this->id;
+        $user_permission->permission_id = $permission->id;
+        $user_permission->save();
+    }
+
+    public function revokePermission(string $name): void
+    {
+        $permission = Permission::query()
+            ->where("name", $name)
+            ->first();
+
+        UserPermission::query()
+            ->where("user_id", $this->id)
+            ->where("permission_id", $permission->id)
+            ->destroy();
+    }
 }

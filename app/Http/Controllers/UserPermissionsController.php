@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use App\Models\UserPermission;
+use App\Models\Permission;
 use App\Models\User;
 
 class UserPermissionsController extends Controller

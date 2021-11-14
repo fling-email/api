@@ -18,18 +18,29 @@ class UsersSeeder extends Seeder
     public function run()
     {
         // Create a user we know the login details for on the first organisation
-        User::factory()->create([
-            "username" => "test",
-            "organisation_id" => Organisation::first()->id
-        ]);
+        $this->grantBasePermissions(
+            User::factory()->create([
+                "username" => "test",
+                "organisation_id" => Organisation::first()->id
+            ])
+        );
 
         // Create 10 random users on all organisations
         foreach (Organisation::get() as $organisation) {
             for ($i = 0; $i < 10; ++$i) {
-                User::factory()->create([
-                    "organisation_id" => $organisation->id,
-                ]);
+                $this->grantBasePermissions(
+                    User::factory()->create([
+                        "organisation_id" => $organisation->id,
+                    ])
+                );
+
+                $user->grantPermission("view_users");
             }
         }
+    }
+
+    private function grantBasePermissions(User $user): void
+    {
+        $user->grantPermission("view_users");
     }
 }
