@@ -5,10 +5,37 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Organisation;
 
 class CreateDomainControllerTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        Cache::forget("public_suffix_list");
+
+        Cache::remember(
+            "public_suffix_list",
+            86400,
+            fn (): array => [
+                "biz",
+                "co.uk",
+                "org",
+                "com",
+                "email",
+            ],
+        );
+    }
+
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        Cache::forget("public_suffix_list");
+    }
+
     public function testCreate(): void
     {
         $this->actingAsTestUser()

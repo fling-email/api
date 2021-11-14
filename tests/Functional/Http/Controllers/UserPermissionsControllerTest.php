@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
+use App\Models\UserPermission;
+use App\Models\Permission;
 
 class UserPermissionsControllerTest extends TestCase
 {
@@ -15,6 +17,12 @@ class UserPermissionsControllerTest extends TestCase
         $this->actingAsTestUser()
             ->get("/users/{$user->uuid}/permissions")
             ->dontSeeJsonSchemaError()
-            ->seeStatusCode(200);
+            ->seeStatusCode(200)
+            ->seeJson($user->userPermissions->map(
+                fn (UserPermission $user_permission): array => [
+                    "name" => $user_permission->permission->name,
+                    "description" => $user_permission->permission->description,
+                ]
+            )->toArray());
     }
 }
