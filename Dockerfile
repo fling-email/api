@@ -7,8 +7,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
  && echo $TZ > /etc/timezone
 
 # Add helper script to make installing php extensions easier
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/download/1.2.60/install-php-extensions /usr/local/bin/
-RUN chmod 0755 /usr/local/bin/install-php-extensions && sync
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.2/install-php-extensions /usr/local/bin/
+RUN chmod 0755 /usr/local/bin/install-php-extensions
 
 # Install PHP extensions we need
 RUN apt-get update -y \
