@@ -27,7 +27,7 @@
         "email_address": {
             "type": "string"
         },
-        "email_address_verified": {
+        "activated": {
             "type": "boolean"
         },
         "enabled": {

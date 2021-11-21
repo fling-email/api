@@ -47,7 +47,7 @@ class CreateDomainControllerTest extends TestCase
                 "name" => "test.biz",
                 "verified" => false,
             ])
-            ->seeStatusCode(200);
+            ->seeStatusCode(201);
     }
 
     public function testCreateWhereAlreadyExists(): void

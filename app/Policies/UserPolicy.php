@@ -48,4 +48,18 @@ class UserPolicy extends Policy
             ? Response::allow()
             : Response::deny("You do not have permission to view this user");
     }
+
+    /**
+     * Checks if a user is allowd to create new user accounts
+     *
+     * @param User $current_user Th user trying to create the account
+     *
+     * @return Response
+     */
+    public function create(User $current_user): Response
+    {
+        return ($current_user->hasPermission("create_user"))
+            ? Response::allow()
+            : Response::deny("You do not have permission to create new users");
+    }
 }

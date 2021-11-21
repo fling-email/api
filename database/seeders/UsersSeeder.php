@@ -18,10 +18,12 @@ class UsersSeeder extends Seeder
     public function run()
     {
         // Create a user we know the login details for on the first organisation
-        $this->createUser([
+        $test_user = $this->createUser([
             "username" => "test",
             "organisation_id" => Organisation::first()->id
         ]);
+
+        $this->setupTestUser($test_user);
 
         // Create 10 random users on all organisations
         foreach (Organisation::get() as $organisation) {
@@ -39,12 +41,26 @@ class UsersSeeder extends Seeder
      * @param array $attributes attributes for the new user
      * @phan-param array<string, mixed> $attributes
      *
-     * @return void
+     * @return User
      */
-    private function createUser(array $attributes): void
+    private function createUser(array $attributes): User
     {
         $user = User::factory()->create($attributes);
 
         $user->grantPermission("view_users");
+
+        return $user;
+    }
+
+    /**
+     * Grants additional permissions to the test user account
+     *
+     * @param User $user The test user
+     *
+     * @return void
+     */
+    private function setupTestUser(User $user): void
+    {
+        $user->grantPermission("create_user");
     }
 }

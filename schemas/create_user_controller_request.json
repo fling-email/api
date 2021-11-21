@@ -1,0 +1,25 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "username": {
+            "type": "string"
+        },
+        "email_address": {
+            "type": "string",
+            "format": "email"
+        },
+        "password": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "name",
+        "username",
+        "email_address"
+    ]
+}

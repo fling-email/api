@@ -110,7 +110,7 @@ class SchemaValidator
             $cwd = \getcwd();
             \chdir(__DIR__ . "/../../../schemas");
 
-            if ($response->getStatusCode() === 200) {
+            if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
                 $schema = $controller_class::getResponseSchema();
             } else {
                 $schema = Schema::import(\json_decode(\file_get_contents(

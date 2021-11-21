@@ -58,7 +58,7 @@ class CreateDomainController extends Controller
 
         $domain->refresh();
 
-        return \response()->json($domain);
+        return \response()->json($domain, 201);
     }
 
     /**

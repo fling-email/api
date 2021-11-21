@@ -39,7 +39,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         "id",
         "organisation_id",
         "password_hash",
-        "email_address_verification_token",
+        "activation_token",
     ];
 
     /**
@@ -50,7 +50,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $casts = [
         "enabled" => "boolean",
-        "email_address_verified" => "boolean",
+        "activated" => "boolean",
     ];
 
     /**
