@@ -101,6 +101,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $user_permission_names->contains($name);
     }
 
+    /**
+     * Gives a permission to the user
+     *
+     * @param string $name The name of the permission to grant
+     *
+     * @return void
+     */
     public function grantPermission(string $name): void
     {
         $permission = Permission::query()
@@ -113,6 +120,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $user_permission->save();
     }
 
+    /**
+     * Removes a permission from the user
+     *
+     * @param string $name The name of the permission to remove
+     *
+     * @return void
+     */
     public function revokePermission(string $name): void
     {
         $permission = Permission::query()
