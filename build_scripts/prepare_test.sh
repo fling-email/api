@@ -33,7 +33,7 @@ docker run \
     -e "APACHE_RUN_USER=#$(id -u)" \
     -e "APACHE_RUN_GROUP=#$(id -g)" \
     --mount "type=bind,source=$(pwd),target=/var/www" \
-    flingemail/api:latest
+    flingemail/api:latest-test
 
 # Start a database for testing
 docker run \
@@ -44,7 +44,7 @@ docker run \
     --health-cmd "mysqladmin ping --silent" \
     -e "MYSQL_ROOT_PASSWORD=secret" \
     -e "MYSQL_DATABASE=api" \
-    mariadb:10.5.8
+    mariadb:10.7.1
 
 database_container_id=$(cat $database_container_id_file)
 

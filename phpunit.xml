@@ -18,4 +18,26 @@
         <env name="CACHE_DRIVER" value="array" />
         <env name="QUEUE_CONNECTION" value="sync" />
     </php>
+    <coverage
+        includeUncoveredFiles="true"
+        processUncoveredFiles="true"
+        pathCoverage="true"
+    >
+        <include>
+            <directory suffix=".php">app</directory>
+            <directory suffix=".php">bootstrap</directory>
+            <directory suffix=".php">public</directory>
+        </include>
+        <report>
+            <clover outputFile="test-results/phpunit/clover.xml" />
+            <html
+                outputDirectory="test-results/phpunit/coverage-html"
+                lowUpperBound="50"
+                highLowerBound="90"
+            />
+        </report>
+    </coverage>
+    <logging>
+        <junit outputFile="test-results/phpunit/junit.xml" />
+    </logging>
 </phpunit>

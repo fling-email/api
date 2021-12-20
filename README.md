@@ -2,6 +2,11 @@
 
 App behind the fling.email service.
 
+## Project Status
+
+This project is still in very early development. Don't expect it to work yet but
+please follow if you're interested.
+
 ## Development
 
 This section assumes you have a local kubernetes deployment already running and

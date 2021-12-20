@@ -23,7 +23,7 @@ class PermissionsControllerTest extends TestCase
                     fn (Permission $permission): array => (
                         $permission->jsonSerialize()
                     )
-                ),
+                )->toArray(),
             ]);
     }
 }
