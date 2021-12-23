@@ -9,7 +9,6 @@ use App\Models\LoginToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;
 
-/** @group current */
 class LogoutControllerTest extends TestCase
 {
     public function testLogout(): void

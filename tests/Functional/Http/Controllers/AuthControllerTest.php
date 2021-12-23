@@ -10,7 +10,6 @@ use App\Models\LoginToken;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;
 
-/** @group current */
 class AuthControllerTest extends TestCase
 {
     public function testGet(): void

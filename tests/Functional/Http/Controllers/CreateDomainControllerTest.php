@@ -31,9 +31,9 @@ class CreateDomainControllerTest extends TestCase
 
     public function tearDown(): void
     {
-        parent::tearDown();
-
         Cache::forget("public_suffix_list");
+
+        parent::tearDown();
     }
 
     public function testCreate(): void
