@@ -15,8 +15,8 @@ class PermissionsControllerTest extends TestCase
             ->get("/permissions")
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
-            ->seeJsonSubset([
-                "data" => Permission::all()->map(
+            ->seeJsonSubset(
+                Permission::all()->map(
                     /**
                      * @phan-return array<string, mixed>
                      */
@@ -24,6 +24,6 @@ class PermissionsControllerTest extends TestCase
                         $permission->jsonSerialize()
                     )
                 )->toArray(),
-            ]);
+            );
     }
 }
