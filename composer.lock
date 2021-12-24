@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd836f0db4df3c1344af091eaad76329",
+    "content-hash": "3e1babf7bc81c572b72b569ed5c31547",
     "packages": [
         {
             "name": "brick/math",
@@ -5551,6 +5551,55 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "betterphp/php-native-mock",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/betterphp/php-native-mock.git",
+                "reference": "ace49cf4663bdb5a1f006dad01dc915e83c234e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/betterphp/php-native-mock/zipball/ace49cf4663bdb5a1f006dad01dc915e83c234e3",
+                "reference": "ace49cf4663bdb5a1f006dad01dc915e83c234e3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-uopz": "*",
+                "php": ">= 7.0.0"
+            },
+            "require-dev": {
+                "betterphp/php-code-style": "dev-master",
+                "phpdocumentor/phpdocumentor": "~2",
+                "phpunit/phpunit": "~6",
+                "squizlabs/php_codesniffer": "~3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "betterphp\\native_mock\\": "./src/native_mock"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "description": "PHP Native Mock is a helper class that allows for easy mocking of native PHP functions and class methods in unit tests using the UOPZ extension.",
+            "keywords": [
+                "function",
+                "mock",
+                "native",
+                "redefine",
+                "test",
+                "unit test"
+            ],
+            "support": {
+                "issues": "https://github.com/betterphp/php-native-mock/issues",
+                "source": "https://github.com/betterphp/php-native-mock/tree/1.1.0"
+            },
+            "time": "2017-08-02T10:23:40+00:00"
+        },
         {
             "name": "composer/pcre",
             "version": "1.0.0",

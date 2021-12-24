@@ -164,4 +164,30 @@ abstract class TestCase extends BaseTestCase
 
         return $this;
     }
+
+    /**
+     * Asserts that the response is a given status
+     *
+     * @param integer $expected_status The expected HTTP satus code
+     * @param ?string $expected_message the expected response message
+     *
+     * @return void
+     */
+    public function seeResponseStatus(int $expected_status, ?string $expected_message = null): self
+    {
+        $this->assertSame(
+            $expected_status,
+            $this->response->getStatusCode(),
+            \json_encode($this->response->original, \JSON_PRETTY_PRINT),
+        );
+
+        if ($expected_message !== null) {
+            $this->assertSame(
+                $expected_message,
+                $this->response->original["message"] ?? "",
+            );
+        }
+
+        return $this;
+    }
 }

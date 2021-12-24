@@ -10,6 +10,7 @@
         "swaggest/json-schema": "^0.12.36"
     },
     "require-dev": {
+        "betterphp/php-native-mock": "^1.1",
         "fakerphp/faker": "^1.15.0",
         "mockery/mockery": "^1.4.3",
         "phan/phan": "^5.1.0",

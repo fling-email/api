@@ -50,7 +50,8 @@ RUN apt-get -y update \
 # Install extra php extensions needed during tests
 RUN apt-get update -y \
  && install-php-extensions \
-    xdebug
+    xdebug \
+    uopz
 
 # Add xdebug config
 ADD docker/php-xdebug.ini "$PHP_INI_DIR/conf.d/zz-xdebug.ini"
