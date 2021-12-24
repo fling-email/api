@@ -42,6 +42,7 @@ docker run \
     --cidfile $database_container_id_file \
     --network $docker_network_id \
     --health-cmd "mysqladmin ping --silent" \
+    --tmpfs "/var/lib/mysql" \
     -e "MYSQL_ROOT_PASSWORD=secret" \
     -e "MYSQL_DATABASE=api" \
     mariadb:10.7.1

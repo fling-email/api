@@ -10,6 +10,8 @@ use App\Models\User;
 
 abstract class TestCase extends BaseTestCase
 {
+    private static string $backup_sql_dump_path;
+
     /**
      * Creates the application.
      *
@@ -35,8 +37,56 @@ abstract class TestCase extends BaseTestCase
     {
         parent::setUp();
 
+        if (!isset(static::$backup_sql_dump_path)) {
+            $this->generateDatabase();
+        } else {
+            $this->restoreDatabase();
+        }
+    }
+
+    /**
+     * Runs the database migrations and seeds then creates an SQL dump that can
+     * be used to quickly restore a known state.
+     *
+     * @return void
+     */
+    private function generateDatabase(): void
+    {
         $this->artisan("migrate:fresh");
         $this->artisan("db:seed");
+
+        $host = \env("DB_HOST");
+        $username = \env("DB_USERNAME");
+        $password = \env("DB_PASSWORD");
+        $database = \env("DB_DATABASE");
+
+        static::$backup_sql_dump_path = \tempnam(\sys_get_temp_dir(), "phpunit_sql_dump_");
+
+        $sql_dump_data = \shell_exec(
+            "mysqldump -h {$host} -u{$username} -p{$password} --skip-comments {$database}"
+        );
+
+        \file_put_contents(static::$backup_sql_dump_path, $sql_dump_data);
+    }
+
+    /**
+     * Restores the database from the previously generated backup
+     *
+     * @return void
+     */
+    private function restoreDatabase(): void
+    {
+        if (!isset(static::$backup_sql_dump_path)) {
+            throw new \Exception("Database has not been generated");
+        }
+
+        $host = \env("DB_HOST");
+        $username = \env("DB_USERNAME");
+        $password = \env("DB_PASSWORD");
+        $database = \env("DB_DATABASE");
+        $file_path = static::$backup_sql_dump_path;
+
+        \exec("mysql -h {$host} -u{$username} -p{$password} {$database} < {$file_path}");
     }
 
     /**

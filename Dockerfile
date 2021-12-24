@@ -42,6 +42,11 @@ ADD --chown=www-data:www-data . /var/www
 ##
 FROM base AS test
 
+# Install MariaDB client tools (used to create database backups)
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash
+RUN apt-get -y update \
+ && apt-get -y install mariadb-client
+
 # Install extra php extensions needed during tests
 RUN apt-get update -y \
  && install-php-extensions \
