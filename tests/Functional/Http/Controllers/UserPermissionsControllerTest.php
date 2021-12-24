@@ -18,7 +18,7 @@ class UserPermissionsControllerTest extends TestCase
             ->get("/users/{$user->uuid}/permissions")
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
-            ->seeJson($user->userPermissions->map(
+            ->seeJsonSubset($user->userPermissions->map(
                 fn (UserPermission $user_permission): array => [
                     "name" => $user_permission->permission->name,
                     "description" => $user_permission->permission->description,
