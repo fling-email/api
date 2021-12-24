@@ -29,6 +29,8 @@ abstract class TestCase extends BaseTestCase
 
     /**
      * Performs any setup actions before each test
+     *
+     * @return void
      */
     public function setUp(): void
     {
@@ -39,6 +41,23 @@ abstract class TestCase extends BaseTestCase
         } else {
             $this->restoreDatabase();
         }
+    }
+
+    /**
+     * Called after each test is run
+     *
+     * @return void
+     */
+    public function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Make sure we always have a configured $this->app on classes. For some
+        // reason generating code coverage tries to access $this->app["config"]
+        // which throws an exception if $this->app is null. Ideally we'd only
+        // run this after the last test, or even more ideally it would not be
+        // needed at all. The performance impact is tiny so just do this for now.
+        $this->refreshApplication();
     }
 
     /**
