@@ -46,16 +46,17 @@ class CreateDomainController extends Controller
 
         [$dkim_private_key, $dkim_public_key] = $this->generateDkimKeys();
 
-        $domain = Domain::create([
-            "uuid" => (string) Str::uuid(),
-            "name" => $domain_name,
-            "organisation_id" => $org->id,
-            "verification_token" => Str::random(60),
-            "verified" => false,
-            "dkim_private_key" => $dkim_private_key,
-            "dkim_public_key" => $dkim_public_key,
-        ]);
+        $domain = new Domain();
 
+        $domain->uuid = (string) Str::uuid();
+        $domain->name = $domain_name;
+        $domain->organisation_id = $org->id;
+        $domain->verification_domain = Str::random(60);
+        $domain->verified = false;
+        $domain->dkim_private_key = $dkim_private_key;
+        $domain->dkim_public_key = $dkim_public_key;
+
+        $domain->save();
         $domain->refresh();
 
         return \response()->json($domain, 201);

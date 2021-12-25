@@ -41,12 +41,15 @@ class LoginController extends Controller
             throw new ForbiddenException("Incorrect username or password");
         }
 
-        $token = LoginToken::create([
-            "uuid" => (string) Str::uuid(),
-            "user_id" => $user->id,
-            "expires_at" => Date::now()->modify("+1 hour"),
-            "token" => Str::random(60),
-        ]);
+        $token = new LoginToken();
+
+        $token->uuid = (string) Str::uuid();
+        $token->user_id = $user->id;
+        $token->expires_at = Date::now()->modify("+1 hour");
+        $token->token = Str::random(60);
+
+        $token->save();
+        $token->refresh();
 
         return \response()->json($token);
     }
