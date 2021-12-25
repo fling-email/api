@@ -78,7 +78,7 @@ class VerifyDomainControllerTest extends TestCase
 
         $this->redefineFunction(
             "dns_get_record",
-            fn () => $dns_results,
+            fn (): mixed => $dns_results,
         );
 
         $this->actingAsTestUser()
@@ -87,6 +87,7 @@ class VerifyDomainControllerTest extends TestCase
             ->seeResponseStatus(400, "Domain could not be verified, check DNS records");
     }
 
+    /** @phan-return list<mixed> */
     public function dataVerifyWithWrongDnsRecords(): array
     {
         return [
@@ -105,7 +106,8 @@ class VerifyDomainControllerTest extends TestCase
 
         $this->redefineFunction(
             "dns_get_record",
-            fn () => [
+            /** @phan-return list<array<string, mixed>> */
+            fn (): array => [
                 ["txt" => "Wrong DNS data"],
             ],
         );

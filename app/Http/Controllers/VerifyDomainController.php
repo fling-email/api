@@ -28,11 +28,11 @@ class VerifyDomainController extends Controller
     {
         $user = $request->user();
 
-        $domain = Domain::where("uuid", $uuid)->first();
+        $domain = Domain::query()->where("uuid", $uuid)->first();
 
         $this->authorize("verify", [Domain::class, $domain]);
 
-        if ($domain->verified) {
+        if ((bool) $domain->verified) {
             throw new BadRequestException("Domain is already verified");
         }
 
@@ -68,6 +68,9 @@ class VerifyDomainController extends Controller
         }
 
         return \collect($txt_records)
-            ->map(fn (array $dns_result): string => $dns_result["txt"]);
+            ->map(
+                /** @phan-param array{txt: string} $dns_result */
+                fn (array $dns_result): string => $dns_result["txt"]
+            );
     }
 }

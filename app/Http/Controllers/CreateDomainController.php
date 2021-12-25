@@ -123,10 +123,11 @@ class CreateDomainController extends Controller
         return Cache::remember(
             "public_suffix_list",
             86400,
+            /** @phan-return string[] */
             function (): array {
                 $raw_data = \file_get_contents("https://publicsuffix.org/list/public_suffix_list.dat");
 
-                return \collect(explode("\n", $raw_data))
+                return \collect(\explode("\n", $raw_data))
                     ->map(fn (string $line): string => \trim($line))
                     ->takeUntil("// ===BEGIN PRIVATE DOMAINS===")
                     ->filter(fn (string $line): bool => (

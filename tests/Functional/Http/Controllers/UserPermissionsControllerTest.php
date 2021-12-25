@@ -6,7 +6,6 @@ namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
 use App\Models\UserPermission;
-use App\Models\Permission;
 
 class UserPermissionsControllerTest extends TestCase
 {
@@ -19,6 +18,7 @@ class UserPermissionsControllerTest extends TestCase
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
             ->seeJsonSubset($user->userPermissions->map(
+                /** @phan-return array<string, string> */
                 fn (UserPermission $user_permission): array => [
                     "name" => $user_permission->permission->name,
                     "description" => $user_permission->permission->description,

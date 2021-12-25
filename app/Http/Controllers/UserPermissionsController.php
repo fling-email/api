@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
-use App\Models\UserPermission;
-use App\Models\Permission;
 use App\Models\User;
 
 class UserPermissionsController extends Controller
@@ -29,10 +27,6 @@ class UserPermissionsController extends Controller
 
         $this->authorize("viewPermissions", [User::class, $user]);
 
-        return \response()->json(
-            $user->userPermissions->map(
-                fn (UserPermission $user_permission): Permission => $user_permission->permission
-            )
-        );
+        return \response()->json($user->getPermissions());
     }
 }

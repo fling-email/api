@@ -73,6 +73,13 @@ class SchemaValidator
             \chdir(__DIR__ . "/../../../schemas");
 
             $schema = $controller_class::getRequestSchema();
+
+            if (!$schema instanceof Schema) {
+                throw new \UnexpectedValueException(
+                    "Controller did not return a valid request schema"
+                );
+            }
+
             $schema->in(\json_decode($request->getContent()));
         } catch (InvalidValue $exception) {
             // Strip the input data from this error type. The client should

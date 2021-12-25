@@ -19,6 +19,7 @@ class CreateDomainControllerTest extends TestCase
         Cache::remember(
             "public_suffix_list",
             86400,
+            /** @phan-return string[] */
             fn (): array => [
                 "biz",
                 "co.uk",
@@ -53,6 +54,8 @@ class CreateDomainControllerTest extends TestCase
     public function testCreateWhereAlreadyExists(): void
     {
         $organisation = Organisation::query()->first();
+        // Tells Phan the correct type for $organisation
+        \assert($organisation instanceof Organisation);
         $existing_domains = $organisation->domains;
 
         $this->actingAsTestUser()

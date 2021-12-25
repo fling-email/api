@@ -45,7 +45,7 @@ class UsersSeeder extends Seeder
      */
     private function createUser(array $attributes): User
     {
-        $user = User::factory()->create($attributes);
+        $user = User::factoryCreate($attributes);
 
         $user->grantPermission("view_users");
 

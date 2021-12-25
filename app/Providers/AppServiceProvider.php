@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Connection;
 use App\Database\Query\Grammars\MySqlGrammar;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +18,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        DB::connection()->setQueryGrammar(new MySqlGrammar());
+        $connection = DB::connection();
+
+        if (!$connection instanceof Connection) {
+            throw new \UnexpectedValueException(
+                "DB::connection() did not return a database connection"
+            );
+        }
+
+        $connection->setQueryGrammar(new MySqlGrammar());
     }
 }

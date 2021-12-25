@@ -11,6 +11,7 @@ use App\Http\Routes\ControllerRoute;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Swaggest\JsonSchema\Schema;
+use Swaggest\JsonSchema\SchemaContract;
 
 abstract class Controller extends BaseController
 {
@@ -63,9 +64,9 @@ abstract class Controller extends BaseController
     /**
      * Gets the request schema for this controller
      *
-     * @return Schema
+     * @return SchemaContract
      */
-    public static function getRequestSchema(): Schema
+    public static function getRequestSchema(): SchemaContract
     {
         $schema_file_path = static::getSchemaFilePath("_request");
         $schema_file_data = \json_decode(\file_get_contents($schema_file_path));
@@ -76,9 +77,9 @@ abstract class Controller extends BaseController
     /**
      * Gets the response schema for this controller
      *
-     * @return Schema
+     * @return SchemaContract
      */
-    public static function getResponseSchema(): Schema
+    public static function getResponseSchema(): SchemaContract
     {
         $schema_file_path = static::getSchemaFilePath("_response");
         $schema_file_data = \json_decode(\file_get_contents($schema_file_path));

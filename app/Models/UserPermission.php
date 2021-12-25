@@ -7,6 +7,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @phan-property User $user
+ */
 class UserPermission extends Model
 {
     protected $hidden = [

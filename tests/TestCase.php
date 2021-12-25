@@ -171,7 +171,7 @@ abstract class TestCase extends BaseTestCase
      * @param integer $expected_status The expected HTTP satus code
      * @param ?string $expected_message the expected response message
      *
-     * @return void
+     * @return $this
      */
     public function seeResponseStatus(int $expected_status, ?string $expected_message = null): self
     {

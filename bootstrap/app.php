@@ -66,6 +66,13 @@ function createApp(): \Laravel\Lumen\Application
      */
     foreach (\App\Http\Controllers\Controller::all() as $controller_class) {
         $controller_route = $controller_class::getRoute();
+
+        if (!$controller_route instanceof \App\Http\Routes\ControllerRoute) {
+            throw new \UnexpectedValueException(
+                "Controller did not return a valid route"
+            );
+        }
+
         $controller_route->register($app->router);
     }
 

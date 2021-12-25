@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
- * @property Collection $users
- * @property Collection $domains
+ * @phan-property Collection<User> $users
+ * @phan-property Collection<Domain> $domains
  */
 class Organisation extends Model
 {

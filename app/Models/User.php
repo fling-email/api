@@ -12,7 +12,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection;
 
+/**
+ * @phan-property Organisation $organisation
+ * @phan-property Collection<LoginToken> $loginTokens
+ * @phan-property Collection<UserPermission> $userPermissions
+ */
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable;
@@ -81,6 +87,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function userPermissions(): HasMany
     {
         return $this->hasMany(UserPermission::class);
+    }
+
+    /**
+     * Gets a list of assigned permissions
+     *
+     * @return Collection
+     * @phan-return Collection<Permission>
+     */
+    public function getPermissions(): Collection
+    {
+        return $this->userPermissions->map(
+            fn (UserPermission $user_permission): Permission => $user_permission->permission
+        );
     }
 
     /**
