@@ -21,7 +21,7 @@ RUN apt-get update -y \
 
 # Configure PHP and Apache
 ADD docker/apache2.conf /etc/apache2/apache2.conf
-ADD docker/php.ini "$PHP_INI_DIR/php.ini"
+ADD docker/php.ini /usr/local/etc/php/php.ini
 
 # Remove default web files
 RUN rm -Rf /var/www \
@@ -54,4 +54,4 @@ RUN apt-get update -y \
     uopz
 
 # Add xdebug config
-ADD docker/php-xdebug.ini "$PHP_INI_DIR/conf.d/zz-xdebug.ini"
+ADD docker/php-xdebug.ini /usr/local/etc/php/conf.d/zz-xdebug.ini
