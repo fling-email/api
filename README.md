@@ -33,13 +33,13 @@ build_scripts/start.sh
 To run the database migrations
 
 ```
-kubectl exec deployment/fling --container web -- php artisan migrate:fresh
+kubectl exec deployment/fling-api --container web -- php artisan migrate:fresh
 ```
 
 You can then populate the database with generated test data
 
 ```
-kubectl exec deployment/fling --container web -- php artisan db:seed
+kubectl exec deployment/fling-api --container web -- php artisan db:seed
 ```
 
 ## Testing

@@ -5,19 +5,19 @@ eval $(minikube docker-env)
 
 # Store the initial values of things we're going to patch so we can change them
 # back later.
-orig_pull_policy=$(kubectl get deployment fling -o json | jq -r '.spec.template.spec.containers[] | select(.name == "web").imagePullPolicy')
-orig_image=$(kubectl get deployment fling -o json | jq -r '.spec.template.spec.containers[] | select(.name == "web").image')
+orig_pull_policy=$(kubectl get deployment fling-api -o json | jq -r '.spec.template.spec.containers[] | select(.name == "web").imagePullPolicy')
+orig_image=$(kubectl get deployment fling-api -o json | jq -r '.spec.template.spec.containers[] | select(.name == "web").image')
 
 function setup() {
     # Build the image and tag it as the loxal one
     echo "Building image"
-    docker build -t flingemail/api:local .
+    docker build -t flingemail/api:local --target app .
 
     # Override imagePullPolicy setting to make sure we use the local images first
     # and update the web container to use the one we just built
     echo "Updating deployment"
-    kubectl patch deployment fling --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
-    kubectl set image deployment/fling web=flingemail/api:local
+    kubectl patch deployment fling-api --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
+    kubectl set image deployment/fling-api web=flingemail/api:local
 
     # Keep local files in sync with the container
     echo "Starting ksync job"
@@ -31,8 +31,8 @@ function teardown() {
 
     # Set the imagePullPolicy and image name back to the original values
     echo "Resetting deployment changes"
-    kubectl patch deployment fling --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
-    kubectl set image deployment/fling web=flingemail/api:local
+    kubectl patch deployment fling-api --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
+    kubectl set image deployment/fling-api web=flingemail/api:local
 }
 
 # Call the setup function
