@@ -51,7 +51,7 @@ class CreateDomainController extends Controller
         $domain->uuid = (string) Str::uuid();
         $domain->name = $domain_name;
         $domain->organisation_id = $org->id;
-        $domain->verification_domain = Str::random(60);
+        $domain->verification_token = Str::random(60);
         $domain->verified = false;
         $domain->dkim_private_key = $dkim_private_key;
         $domain->dkim_public_key = $dkim_public_key;
