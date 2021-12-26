@@ -155,6 +155,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         UserPermission::query()
             ->where("user_id", $this->id)
             ->where("permission_id", $permission->id)
-            ->destroy();
+            ->delete();
     }
 }

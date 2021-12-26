@@ -62,5 +62,6 @@ class UsersSeeder extends Seeder
     private function setupTestUser(User $user): void
     {
         $user->grantPermission("create_user");
+        $user->grantPermission("update_user");
     }
 }

@@ -52,7 +52,7 @@ class UserPolicy extends Policy
     /**
      * Checks if a user is allowd to create new user accounts
      *
-     * @param User $current_user Th user trying to create the account
+     * @param User $current_user The user trying to create the account
      *
      * @return Response
      */
@@ -61,5 +61,20 @@ class UserPolicy extends Policy
         return ($current_user->hasPermission("create_user"))
             ? Response::allow()
             : Response::deny("You do not have permission to create new users");
+    }
+
+    /**
+     * Checks if a user is allowed to update user account details
+     *
+     * @param User $current_user The user trying to perform the update
+     * @param ?User $user The user being updated
+     *
+     * @return Response
+     */
+    public function edit(User $current_user, ?User $user): Response
+    {
+        return ($user !== null && $current_user->hasPermission("update_user"))
+            ? Response::allow()
+            : Response::deny("You do not have permission to update this user");
     }
 }

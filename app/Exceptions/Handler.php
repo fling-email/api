@@ -62,6 +62,13 @@ class Handler extends ExceptionHandler
             );
         }
 
+        if ($exception instanceof AuthorizationException) {
+            return $this->render(
+                $request,
+                new ForbiddenException($exception->getMessage())
+            );
+        }
+
         return parent::render($request, $exception);
     }
 }

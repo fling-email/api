@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Routes\ControllerRoute;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\SchemaContract;
 
@@ -18,6 +19,13 @@ abstract class Controller extends BaseController
     public static ?string $method = null;
     public static ?string $path = null;
     public static bool $auth = true;
+
+    /**
+     * @param Request $request The request being handled
+     */
+    public function __construct(protected Request $request)
+    {
+    }
 
     /**
      * Gets a list of all controllers
@@ -105,5 +113,27 @@ abstract class Controller extends BaseController
             . "/../../../schemas/"
             . Str::snake($controller_base_name)
             . "{$suffix}.json";
+    }
+
+    /**
+     * Gets a list of fields that can be edited via a patch request
+     *
+     * @return Collection
+     * @phan-return Collection<string>
+     */
+    protected function getEditableProperties(): Collection
+    {
+        if (static::$method !== "patch") {
+            throw new \UnexpectedValueException(
+                "Trying to get editable properties for invalid request method " . static::$method
+            );
+        }
+
+        // Avoid expensive schema parsing when we only want a list of properties
+        $file_path = static::getSchemaFilePath("_request");
+        $schema_data = \json_decode(\file_get_contents($file_path));
+
+        return \collect($schema_data->properties)
+            ->keys();
     }
 }
