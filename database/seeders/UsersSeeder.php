@@ -63,5 +63,6 @@ class UsersSeeder extends Seeder
     {
         $user->grantPermission("create_user");
         $user->grantPermission("update_user");
+        $user->grantPermission("delete_user");
     }
 }

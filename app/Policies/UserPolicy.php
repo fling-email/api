@@ -77,4 +77,19 @@ class UserPolicy extends Policy
             ? Response::allow()
             : Response::deny("You do not have permission to update this user");
     }
+
+    /**
+     * Checks if a user is allowed to delete user accounts
+     *
+     * @param User $current_user The user trying to delete the account
+     * @param ?User $user The user being deleted
+     *
+     * @return Response
+     */
+    public function delete(User $current_user, ?User $user): Response
+    {
+        return ($user !== null && $current_user->hasPermission("delete_user"))
+            ? Response::allow()
+            : Response::deny("You do not have permission to delete this user");
+    }
 }

@@ -15,9 +15,11 @@ class EditUserController extends Controller
     public static ?string $path = "/users/{uuid}";
 
     /**
-     * __invoke
+     * Handles patch requests to the user endpoint
      *
-     * @param string $uuid
+     * @param string $uuid The UUID of the user being edited
+     *
+     * @return Response|JsonResponse
      */
     public function __invoke(string $uuid): Response|JsonResponse
     {
