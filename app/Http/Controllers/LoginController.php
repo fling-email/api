@@ -18,6 +18,7 @@ class LoginController extends Controller
     public static ?string $method = "post";
     public static ?string $path = "/auth";
     public static bool $auth = false;
+    public static bool $paginated = false;
 
     /**
      * Handles post requests to the /auth endpoint

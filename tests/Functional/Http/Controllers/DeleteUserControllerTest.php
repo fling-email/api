@@ -10,7 +10,6 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;
 
-/** @group current */
 class DeleteUserControllerTest extends TestCase
 {
     public function testDelete(): void

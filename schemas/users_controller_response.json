@@ -1,7 +1,14 @@
 {
     "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "type": "array",
-    "items": {
-        "$ref": "object_definitions/user.json#"
-    }
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "array",
+            "items": {
+                "$ref": "object_definitions/user.json#"
+            }
+        }
+    },
+    "additionalProperties": false,
+    "required": ["data"]
 }

@@ -24,11 +24,9 @@ class UsersController extends Controller
     {
         $user = $request->user();
         $users = User::query()
-            ->where("organisation_id", $user->organisation_id)
-            ->get();
+            ->with("userPermissions.permission")
+            ->where("organisation_id", $user->organisation_id);
 
-        $users->load("userPermissions.permission");
-
-        return \response()->json($users);
+        return $this->jsonResponse($users);
     }
 }

@@ -17,12 +17,14 @@ class UserPermissionsControllerTest extends TestCase
             ->get("/users/{$user->uuid}/permissions")
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
-            ->seeJsonSubset($user->userPermissions->map(
-                /** @phan-return array<string, string> */
-                fn (UserPermission $user_permission): array => [
-                    "name" => $user_permission->permission->name,
-                    "description" => $user_permission->permission->description,
-                ]
-            )->toArray());
+            ->seeJsonSubset([
+                "data" => $user->userPermissions->map(
+                    /** @phan-return array<string, string> */
+                    fn (UserPermission $user_permission): array => [
+                        "name" => $user_permission->permission->name,
+                        "description" => $user_permission->permission->description,
+                    ]
+                )->toArray()
+            ]);
     }
 }

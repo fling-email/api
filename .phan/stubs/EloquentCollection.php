@@ -34,7 +34,7 @@ abstract class Collection extends BaseCollection implements QueueableCollection
     /**
      * @phan-return T
      */
-    public function first()
+    public function first(callable $callback = null)
     {
     }
 

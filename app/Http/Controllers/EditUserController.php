@@ -13,6 +13,7 @@ class EditUserController extends Controller
 {
     public static ?string $method = "patch";
     public static ?string $path = "/users/{uuid}";
+    public static bool $paginated = false;
 
     /**
      * Handles patch requests to the user endpoint

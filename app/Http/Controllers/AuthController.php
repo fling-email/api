@@ -12,6 +12,7 @@ class AuthController extends Controller
 {
     public static ?string $method = "get";
     public static ?string $path = "/auth";
+    public static bool $paginated = false;
 
     /**
      * Handles get requests to the /auth endpoint

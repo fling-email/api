@@ -15,6 +15,7 @@ class VerifyDomainController extends Controller
 {
     public static ?string $method = "post";
     public static ?string $path = "/domains/{uuid}/verify";
+    public static bool $paginated = false;
 
     /**
      * Handles requests for the /domains/{uuid}/verify endpoint

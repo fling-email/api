@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class DomainsController extends Controller
@@ -15,16 +14,14 @@ class DomainsController extends Controller
     /**
      * Handles requests for the /domains endpoint
      *
-     * @param Request $request The request
-     *
      * @return JsonResponse
      */
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(): JsonResponse
     {
-        $user = $request->user();
+        $user = $this->getRequestUser();
 
-        return \response()->json(
-            $user->organisation->domains
+        return $this->jsonResponse(
+            $user->organisation->domains()->getQuery()
         );
     }
 }

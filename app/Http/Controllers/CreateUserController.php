@@ -15,6 +15,7 @@ class CreateUserController extends Controller
 {
     public static ?string $method = "post";
     public static ?string $path = "/users";
+    public static bool $paginated = false;
 
     /**
      * Handles requests to crate new user accounts

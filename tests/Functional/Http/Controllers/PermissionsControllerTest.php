@@ -12,11 +12,11 @@ class PermissionsControllerTest extends TestCase
     public function testGet(): void
     {
         $this->actingAsTestUser()
-            ->get("/permissions")
+            ->get("/permissions?per_page=100")
             ->dontSeeJsonSchemaError()
             ->seeStatusCode(200)
-            ->seeJsonSubset(
-                Permission::all()->map(
+            ->seeJsonSubset([
+                "data" => Permission::all()->map(
                     /**
                      * @phan-return array<string, mixed>
                      */
@@ -24,6 +24,6 @@ class PermissionsControllerTest extends TestCase
                         $permission->jsonSerialize()
                     )
                 )->toArray(),
-            );
+            ]);
     }
 }

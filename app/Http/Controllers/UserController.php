@@ -12,6 +12,7 @@ class UserController extends Controller
 {
     public static ?string $method = "get";
     public static ?string $path = "/users/{uuid}";
+    public static bool $paginated = false;
 
     /**
      * Handles requests to the /users/{uuid} endpoint

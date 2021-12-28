@@ -18,6 +18,7 @@ class CreateDomainController extends Controller
 
     public static ?string $method = "post";
     public static ?string $path = "/domains";
+    public static bool $paginated = false;
 
     /**
      * Handles requests for the /domains endpoint

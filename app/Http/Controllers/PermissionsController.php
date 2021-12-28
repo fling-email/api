@@ -19,8 +19,8 @@ class PermissionsController extends Controller
      */
     public function __invoke(): JsonResponse
     {
-        return \response()->json(
-            Permission::all()
+        return $this->jsonResponse(
+            Permission::query()
         );
     }
 }

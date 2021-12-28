@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Permission;
 
 class UserPermissionsController extends Controller
 {
@@ -21,12 +23,19 @@ class UserPermissionsController extends Controller
      */
     public function __invoke(string $uuid): JsonResponse
     {
-        $user = User::with("userPermissions.permission")
+        $user = User::query()
             ->where("uuid", $uuid)
             ->first();
 
         $this->authorize("viewPermissions", [User::class, $user]);
 
-        return \response()->json($user->getPermissions());
+        return $this->jsonResponse(
+            Permission::query()->whereIn(
+                "id",
+                DB::table("user_permissions")
+                    ->select("permission_id")
+                    ->where("user_id", $user->id)
+            )
+        );
     }
 }
