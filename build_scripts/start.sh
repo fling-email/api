@@ -9,6 +9,14 @@ orig_pull_policy=$(kubectl get deployment fling-api -o json | jq -r '.spec.templ
 orig_image=$(kubectl get deployment fling-api -o json | jq -r '.spec.template.spec.containers[] | select(.name == "web").image')
 
 function setup() {
+    # Make sure ksync is going to work before messing with the deployment
+    ksync_output=$(ksync get)
+
+    if [ $? -ne 0 ]; then
+        echo ${ksync_output}
+        exit $?
+    fi
+
     # Build the image and tag it as the loxal one
     echo "Building image"
     docker build -t flingemail/api:local --target app .
@@ -18,6 +26,18 @@ function setup() {
     echo "Updating deployment"
     kubectl patch deployment fling-api --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
     kubectl set image deployment/fling-api web=flingemail/api:local
+
+    # Wait for the containers to be ready with the new image
+    until [ "$(kubectl get pods --selector app=fling,service=api --field-selector status.phase!=Running)" == "" ]; do
+
+        echo "Waiting for replacement pods to be ready"
+        echo "Current status:"
+
+        kubectl get pods --selector app=fling,service=api
+
+        sleep 5
+
+    done
 
     # Keep local files in sync with the container
     echo "Starting ksync job"
@@ -31,8 +51,8 @@ function teardown() {
 
     # Set the imagePullPolicy and image name back to the original values
     echo "Resetting deployment changes"
-    kubectl patch deployment fling-api --patch '{"spec": {"template": {"spec": {"containers": [{"name": "web", "imagePullPolicy": "Never"}]}}}}'
-    kubectl set image deployment/fling-api web=flingemail/api:local
+    kubectl patch deployment fling-api --patch "{\"spec\": {\"template\": {\"spec\": {\"containers\": [{\"name\": \"web\", \"imagePullPolicy\": \"${orig_pull_policy}\"}]}}}}"
+    kubectl set image deployment/fling-api web=${orig_image}
 }
 
 # Call the setup function
