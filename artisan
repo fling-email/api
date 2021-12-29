@@ -1,14 +1,22 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . "/vendor/autoload.php";
 require_once __DIR__ . "/bootstrap/app.php";
 
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 
-$app = createApp();
+$app = \createApp();
 
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+$kernel = $app->make(KernelContract::class);
 
-exit($kernel->handle(new ArgvInput, new ConsoleOutput));
+$result = $kernel->handle(
+    new ArgvInput(),
+    new ConsoleOutput(),
+);
+
+exit($result);

@@ -9,17 +9,19 @@ use App\Exceptions\InternalServerErrorException;
 use App\Exceptions\BadRequestException;
 use App\Http\Controllers\Controller;
 use App\Http\Routes\ControllerRoute;
+use App\Utils\LoadsJsonSchemas;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Database\Eloquent\Builder as EloquentQueryBuilder;
-use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\SchemaContract;
 
 abstract class Controller extends BaseController
 {
+    use LoadsJsonSchemas;
+
     public static ?string $method = null;
     public static ?string $path = null;
     public static bool $auth = true;
@@ -84,7 +86,7 @@ abstract class Controller extends BaseController
         $schema_file_path = static::getSchemaFilePath("_request");
         $schema_file_data = \json_decode(\file_get_contents($schema_file_path));
 
-        return Schema::import($schema_file_data);
+        return static::loadSchemaData($schema_file_data);
     }
 
     /**
@@ -111,7 +113,7 @@ abstract class Controller extends BaseController
             }
         }
 
-        return Schema::import($schema_file_data);
+        return static::loadSchemaData($schema_file_data);
     }
 
     /**

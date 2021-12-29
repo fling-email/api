@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Domain;
 use App\Exceptions\BadRequestException;
-use App\Traits\GeneratesDkimKeys;
+use App\Utils\GeneratesDkimKeys;
 
 class CreateDomainController extends Controller
 {

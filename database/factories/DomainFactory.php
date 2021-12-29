@@ -6,7 +6,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Domain;
-use App\Traits\GeneratesDkimKeys;
+use App\Utils\GeneratesDkimKeys;
 
 class DomainFactory extends Factory
 {

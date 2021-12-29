@@ -7,19 +7,23 @@ namespace App\Http\Middleware;
 use App\Http\Controllers\Controller;
 use App\Exceptions\BadRequestException;
 use App\Exceptions\InternalServerErrorException;
+use App\Utils\LoadsJsonSchemas;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Swaggest\JsonSchema\Schema;
 use Swaggest\JsonSchema\InvalidValue;
 use Swaggest\JsonSchema\Exception\ObjectException;
 
 class SchemaValidator
 {
+    use LoadsJsonSchemas;
+
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request the request
+     * @param Request $request The request being handled
      * @param \Closure $next the next handler in the chain
      * @param string $controller_class The controller being called
      * @phan-param class-string<Controller> $controller_class
@@ -55,23 +59,12 @@ class SchemaValidator
      */
     private function validateRequestSchema(string $controller_class, Request $request): void
     {
-        $should_have_body = \in_array(
-            $controller_class::$method,
-            ["post", "patch", "put"],
-            true
-        );
-
         // Only validate requests that should have a body
-        if (!$should_have_body) {
+        if (!Arr::has(["post", "patch", "put"], $controller_class::$method)) {
             return;
         }
 
         try {
-            // cd into the scemas folder while validating so that relative
-            // file paths work as expected.
-            $cwd = \getcwd();
-            \chdir(__DIR__ . "/../../../schemas");
-
             $schema = $controller_class::getRequestSchema();
 
             if (!$schema instanceof Schema) {
@@ -82,15 +75,13 @@ class SchemaValidator
 
             $schema->in(\json_decode($request->getContent()));
         } catch (InvalidValue $exception) {
-            // Strip the input data from this error type. The client should
-            // know what it sent and it's not very readable to users.
+            // Strip the input data from this error type. The client should know
+            // what it sent and it's not very readable to users.
             $message = ($exception instanceof ObjectException)
                 ? Str::before($exception->getMessage(), ", data: {")
                 : $exception->getMessage();
 
             throw new BadRequestException($message);
-        } finally {
-            \chdir($cwd);
         }
     }
 
@@ -112,18 +103,9 @@ class SchemaValidator
         }
 
         try {
-            // cd into the scemas folder while validating so that relative
-            // file paths work as expected.
-            $cwd = \getcwd();
-            \chdir(__DIR__ . "/../../../schemas");
-
-            if ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
-                $schema = $controller_class::getResponseSchema();
-            } else {
-                $schema = Schema::import(\json_decode(\file_get_contents(
-                    __DIR__ . "/../../../schemas/error_response.json"
-                )));
-            }
+            $schema = ($response->getStatusCode() >= 200 && $response->getStatusCode() < 300)
+                ? $controller_class::getResponseSchema()
+                : static::loadSchemaFile("error_response.json");
 
             $schema->in(\json_decode($response->getContent()));
         } catch (InvalidValue $exception) {
@@ -138,8 +120,6 @@ class SchemaValidator
                     "response" => $response->getContent(),
                 ]
             );
-        } finally {
-            \chdir($cwd);
         }
     }
 }

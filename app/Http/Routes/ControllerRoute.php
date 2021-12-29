@@ -11,17 +11,11 @@ use Laravel\Lumen\Routing\Router;
 class ControllerRoute extends Route
 {
     /**
-     * @phan-var class-string<Controller>
-     */
-    private string $controller_class;
-
-    /**
      * @param string $controller_class The controller class name
      * @phan-param class-string<Controller> $controller_class
      */
-    public function __construct(string $controller_class)
+    public function __construct(private string $controller_class)
     {
-        $this->controller_class = $controller_class;
     }
 
     /**

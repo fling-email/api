@@ -7,6 +7,7 @@ namespace App\Exceptions;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
@@ -16,7 +17,8 @@ class Handler extends ExceptionHandler
     /**
      * A list of the exception types that should not be reported.
      *
-     * @var array
+     * @var string[]
+     * @phan-var class-string[]
      */
     protected $dontReport = [
         AuthorizationException::class,
@@ -29,12 +31,9 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+     * @param \Throwable $exception The exception to log
      *
-     * @param  \Throwable  $exception
      * @return void
-     *
-     * @throws \Exception
      */
     public function report(\Throwable $exception)
     {
@@ -47,14 +46,14 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param \Illuminate\Http\Request  $request
-     * @param \Throwable $exception
-     * @return SymfonyResponse
+     * @param Request $request The request that triggered the exception
+     * @param \Throwable $exception The exception to render
      *
-     * @throws \Throwable
+     * @return SymfonyResponse
      */
     public function render($request, \Throwable $exception)
     {
+        // Render AppException instances for the user to see
         if ($exception instanceof AppException) {
             return \response()->json(
                 $exception->json(),
@@ -62,6 +61,7 @@ class Handler extends ExceptionHandler
             );
         }
 
+        // Convert exceptions from $this->authorize() to HTTP Forbidden responses
         if ($exception instanceof AuthorizationException) {
             return $this->render(
                 $request,
@@ -69,6 +69,7 @@ class Handler extends ExceptionHandler
             );
         }
 
+        // Otherwise render it as normal
         return parent::render($request, $exception);
     }
 }
