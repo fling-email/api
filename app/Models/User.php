@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Collection;
 
 /**
  * @phan-property Organisation $organisation
- * @phan-property Collection<LoginToken> $loginTokens
- * @phan-property Collection<UserPermission> $userPermissions
+ * @phan-property EloquentCollection<LoginToken> $loginTokens
+ * @phan-property EloquentCollection<UserPermission> $userPermissions
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -92,13 +93,26 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * Gets a list of assigned permissions
      *
-     * @return Collection
-     * @phan-return Collection<Permission>
+     * @return EloquentCollection
+     * @phan-return EloquentCollection<Permission>
      */
-    public function getPermissions(): Collection
+    public function getPermissions(): EloquentCollection
     {
         return $this->userPermissions->map(
             fn (UserPermission $user_permission): Permission => $user_permission->permission
+        );
+    }
+
+    /**
+     * Gets a list of assigned permission names
+     *
+     * @return EloquentCollection
+     * @phan-return Collection<string>
+     */
+    public function getPermissionNames(): Collection
+    {
+        return $this->getPermissions()->map(
+            fn (Permission $permission): string => $permission->name
         );
     }
 
@@ -129,6 +143,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function grantPermission(string $name): void
     {
+        // Just do nothing if the user already has the permission
+        if ($this->hasPermission($name)) {
+            return;
+        }
+
         $permission = Permission::query()
             ->where("name", $name)
             ->firstOrFail();

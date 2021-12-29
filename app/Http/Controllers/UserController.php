@@ -23,7 +23,9 @@ class UserController extends Controller
      */
     public function __invoke(string $uuid): Response|JsonResponse
     {
-        $user = User::query()->where("uuid", $uuid)->first();
+        $user = User::query()
+            ->where("uuid", $uuid)
+            ->first();
 
         $this->authorize("view", [User::class, $user]);
 

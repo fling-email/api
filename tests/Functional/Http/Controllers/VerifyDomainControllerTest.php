@@ -28,7 +28,6 @@ class VerifyDomainControllerTest extends TestCase
     public function testVerify(): void
     {
         $user = $this->getTestUser();
-        $user->grantPermission("verify_domain");
 
         $domain = $user->organisation->domains->first();
 
@@ -43,6 +42,8 @@ class VerifyDomainControllerTest extends TestCase
         $user = $this->getTestUser();
         $domain = $user->organisation->domains->first();
 
+        $user->revokePermission("verify_domain");
+
         $this->actingAsTestUser()
             ->post("/domains/{$domain->uuid}/verify")
             ->dontSeeJsonSchemaError()
@@ -53,8 +54,6 @@ class VerifyDomainControllerTest extends TestCase
     {
         $user = $this->getTestUser();
         $domain = $user->organisation->domains->first();
-
-        $user->grantPermission("verify_domain");
 
         $domain->verified = true;
         $domain->save();
@@ -73,8 +72,6 @@ class VerifyDomainControllerTest extends TestCase
     {
         $user = $this->getTestUser();
         $domain = $user->organisation->domains->first();
-
-        $user->grantPermission("verify_domain");
 
         $this->redefineFunction(
             "dns_get_record",
@@ -101,8 +98,6 @@ class VerifyDomainControllerTest extends TestCase
     {
         $user = $this->getTestUser();
         $domain = $user->organisation->domains->first();
-
-        $user->grantPermission("verify_domain");
 
         $this->redefineFunction(
             "dns_get_record",

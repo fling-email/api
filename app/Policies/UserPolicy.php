@@ -30,6 +30,26 @@ class UserPolicy extends Policy
     }
 
     /**
+     * Checks if a user is allowed to update other users permissions
+     *
+     * @param User $current_user The current user
+     * @param ?User $user The user beining viewed
+     *
+     * @return Response
+     */
+    public function editPermissions(User $current_user, ?User $user): Response
+    {
+        $can_edit = $user !== null
+            && $current_user->id !== $user->id
+            && $current_user->organisation_id === $user->organisation_id
+            && $current_user->hasPermission("edit_user_permissions");
+
+        return ($can_edit)
+            ? Response::allow()
+            : Response::deny("You do not have permissions to edit user permissions");
+    }
+
+    /**
      * Checks if a user is allowed to view details of a user
      *
      * @param User $current_user The authenticated user
@@ -73,7 +93,11 @@ class UserPolicy extends Policy
      */
     public function edit(User $current_user, ?User $user): Response
     {
-        return ($user !== null && $current_user->hasPermission("update_user"))
+        $can_edit = $user !== null
+            && $current_user->organisation_id === $user->organisation_id
+            && $current_user->hasPermission("update_user");
+
+        return ($can_edit)
             ? Response::allow()
             : Response::deny("You do not have permission to update this user");
     }
@@ -88,7 +112,11 @@ class UserPolicy extends Policy
      */
     public function delete(User $current_user, ?User $user): Response
     {
-        return ($user !== null && $current_user->hasPermission("delete_user"))
+        $can_delete = $user !== null
+            && $current_user->organisation_id === $user->organisation_id
+            && $current_user->hasPermission("delete_user");
+
+        return ($can_delete)
             ? Response::allow()
             : Response::deny("You do not have permission to delete this user");
     }

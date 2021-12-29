@@ -35,6 +35,8 @@ class UserControllerTest extends TestCase
             ->where("id", "!=", $user->id)
             ->first();
 
+        $user->revokePermission("view_user");
+
         $this->actingAsTestUser()
             ->get("/users/{$other_user->uuid}")
             ->dontSeeJsonSchemaError()

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Organisation;
+use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder
@@ -61,8 +62,8 @@ class UsersSeeder extends Seeder
      */
     private function setupTestUser(User $user): void
     {
-        $user->grantPermission("create_user");
-        $user->grantPermission("update_user");
-        $user->grantPermission("delete_user");
+        foreach (Permission::all() as $permission) {
+            $user->grantPermission($permission->name);
+        }
     }
 }

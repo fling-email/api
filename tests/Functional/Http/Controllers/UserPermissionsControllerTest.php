@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
-use App\Models\UserPermission;
 
 class UserPermissionsControllerTest extends TestCase
 {
@@ -14,17 +13,13 @@ class UserPermissionsControllerTest extends TestCase
         $user = $this->getTestUser();
 
         $this->actingAsTestUser()
-            ->get("/users/{$user->uuid}/permissions")
+            ->get("/users/{$user->uuid}/permissions?per_page=100")
             ->dontSeeJsonSchemaError()
-            ->seeStatusCode(200)
-            ->seeJsonSubset([
-                "data" => $user->userPermissions->map(
-                    /** @phan-return array<string, string> */
-                    fn (UserPermission $user_permission): array => [
-                        "name" => $user_permission->permission->name,
-                        "description" => $user_permission->permission->description,
-                    ]
-                )->toArray()
-            ]);
+            ->seeStatusCode(200);
+
+        $expected_permission_names = $user->getPermissionNames()->toArray();
+        $response_permission_names = \array_column($this->response->json()["data"], "name");
+
+        $this->assertEqualsCanonicalizing($response_permission_names, $expected_permission_names);
     }
 }
