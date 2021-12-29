@@ -2,72 +2,69 @@
 
 declare(strict_types=1);
 
+use Laravel\Lumen\Application;
+use Laravel\Lumen\Bootstrap\LoadEnvironmentVariables;
+use Carbon\CarbonInterface;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use App\Console\Kernel;
+use App\Exceptions\Handler;
+use App\Providers\AppServiceProvider;
+use App\Providers\AuthServiceProvider;
+use App\Providers\EventServiceProvider;
+use App\Http\Controllers\Controller;
+use App\Http\Routes\ControllerRoute;
+use App\Http\Middleware\Authenticate as AuthenticateMiddleware;
+use App\Http\Middleware\SchemaValidator as SchemaValidatorMiddleware;
+
 /**
  * Creates a new instance of the application
  *
- * @return \Laravel\Lumen\Application
+ * @return Application
  */
-function createApp(): \Laravel\Lumen\Application
+function createApp(): Application
 {
-    (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(dirname(__DIR__)))
+    (new LoadEnvironmentVariables(\dirname(__DIR__)))
         ->bootstrap();
 
-    date_default_timezone_set("UTC");
-
-    /**
-     * Create The Application
-     */
-    $app = new Laravel\Lumen\Application(dirname(__DIR__));
+    $app = new Application(\dirname(__DIR__));
 
     $app->withFacades();
     $app->withEloquent();
 
-    Illuminate\Support\Facades\Date::useCallable(
-        fn (mixed $date): mixed => ($date instanceof Carbon\CarbonInterface)
+    // Make dates be UTC always
+    \date_default_timezone_set("UTC");
+
+    Date::useCallable(
+        fn (mixed $date): mixed => ($date instanceof CarbonInterface)
             ? $date->setTimezone("UTC")
             : $date
     );
 
-    /**
-     * Register Container Bindings
-     */
-    $app->singleton(
-        Illuminate\Contracts\Debug\ExceptionHandler::class,
-        App\Exceptions\Handler::class
-    );
+    // Register container bindings
+    $app->singleton(ExceptionHandlerContract::class, Handler::class);
+    $app->singleton(KernelContract::class, Kernel::class);
 
-    $app->singleton(
-        Illuminate\Contracts\Console\Kernel::class,
-        App\Console\Kernel::class
-    );
-
-    /**
-     * Register Config Files
-     */
+    // Register config files
     $app->configure("app");
 
-    /**
-     * Register Middleware
-     */
+    // Register middleware
     $app->routeMiddleware([
-        "auth" => App\Http\Middleware\Authenticate::class,
-        "validate_schemas" => App\Http\Middleware\SchemaValidator::class,
+        "auth" => AuthenticateMiddleware::class,
+        "validate_schemas" => SchemaValidatorMiddleware::class,
     ]);
 
-    /**
-     * Register Service Providers
-     */
-    $app->register(App\Providers\AppServiceProvider::class);
-    $app->register(App\Providers\AuthServiceProvider::class);
-    $app->register(App\Providers\EventServiceProvider::class);
+    // Register service providers
+    $app->register(AppServiceProvider::class);
+    $app->register(AuthServiceProvider::class);
+    $app->register(EventServiceProvider::class);
 
-    /**
-     * Load The Application Routes
-     */
-    foreach (\App\Http\Controllers\Controller::all() as $controller_class) {
+    // Load the application routes
+    foreach (Controller::all() as $controller_class) {
         $controller_route = $controller_class::getRoute();
 
-        if (!$controller_route instanceof \App\Http\Routes\ControllerRoute) {
+        if (!$controller_route instanceof ControllerRoute) {
             throw new \UnexpectedValueException(
                 "Controller did not return a valid route"
             );
