@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Date;
 use Tests\TestCase;
 use App\Models\LoginToken;
 
+/**
+ * @covers App\Http\Controllers\EditUserController
+ */
 class EditUserControllerTest extends TestCase
 {
     public function testEdit(): void

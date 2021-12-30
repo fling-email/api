@@ -6,6 +6,9 @@ namespace Tests\Functional\Http\Controllers;
 
 use Tests\TestCase;
 
+/**
+ * @covers App\Http\Controllers\LoginController
+ */
 class LoginControllerTest extends TestCase
 {
     public function testLogin(): void

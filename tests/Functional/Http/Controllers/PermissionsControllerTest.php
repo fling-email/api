@@ -7,6 +7,9 @@ namespace Tests\Functional\Http\Controllers;
 use Tests\TestCase;
 use App\Models\Permission;
 
+/**
+ * @covers App\Http\Controllers\PermissionsController
+ */
 class PermissionsControllerTest extends TestCase
 {
     public function testGet(): void

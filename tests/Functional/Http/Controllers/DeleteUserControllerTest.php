@@ -10,6 +10,9 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Date;
 
+/**
+ * @covers App\Http\Controllers\DeleteUserController
+ */
 class DeleteUserControllerTest extends TestCase
 {
     public function testDelete(): void

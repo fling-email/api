@@ -7,6 +7,9 @@ namespace Tests\Functional\Http\Controllers;
 use Tests\TestCase;
 use betterphp\native_mock\native_mock;
 
+/**
+ * @covers App\Http\Controllers\VerifyDomainController
+ */
 class VerifyDomainControllerTest extends TestCase
 {
     use native_mock;

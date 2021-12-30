@@ -7,6 +7,9 @@ namespace Tests\Functional\Http\Controllers;
 use Tests\TestCase;
 use App\Models\User;
 
+/**
+ * @covers App\Http\Controllers\UserController
+ */
 class UserControllerTest extends TestCase
 {
     public function testGetSelf(): void

@@ -8,6 +8,9 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Organisation;
 
+/**
+ * @covers App\Http\Controllers\CreateDomainController
+ */
 class CreateDomainControllerTest extends TestCase
 {
     public function setUp(): void
