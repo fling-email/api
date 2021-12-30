@@ -11,6 +11,7 @@
     },
     "require-dev": {
         "betterphp/php-native-mock": "^1.1",
+        "betterphp/php-reflection-utils": "^1.0.0",
         "fakerphp/faker": "^1.17.0",
         "mockery/mockery": "^1.4.4",
         "phan/phan": "^5.3.1",
