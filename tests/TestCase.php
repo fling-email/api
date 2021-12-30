@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests;
 
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
-use Laravel\Lumen\Application;
+use App\Application;
 use App\Models\User;
 
 abstract class TestCase extends BaseTestCase
@@ -18,13 +18,11 @@ abstract class TestCase extends BaseTestCase
      * Phan can't handle the dynamic type stuff that goes on here
      * @phan-suppress PhanParamSignatureMismatch
      *
-     * @return \Laravel\Lumen\Application
+     * @return Application
      */
     public function createApplication(): Application
     {
-        require_once __DIR__ . "/../bootstrap/app.php";
-
-        return \createApp();
+        return new Application();
     }
 
     /**

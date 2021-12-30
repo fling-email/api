@@ -2,7 +2,6 @@
 <ruleset>
     <file>./artisan</file>
     <file>./app</file>
-    <file>./bootstrap</file>
     <file>./database</file>
     <file>./public</file>
     <file>./tests</file>

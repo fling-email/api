@@ -25,7 +25,6 @@
     >
         <include>
             <directory suffix=".php">app</directory>
-            <directory suffix=".php">bootstrap</directory>
             <directory suffix=".php">public</directory>
         </include>
         <report>

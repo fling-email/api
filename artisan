@@ -4,13 +4,13 @@
 declare(strict_types=1);
 
 require_once __DIR__ . "/vendor/autoload.php";
-require_once __DIR__ . "/bootstrap/app.php";
 
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
+use App\Application;
 
-$app = \createApp();
+$app = new Application();
 
 $kernel = $app->make(KernelContract::class);
 
