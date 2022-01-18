@@ -8,8 +8,6 @@ use Tests\TestCase;
 
 /**
  * @covers App\Http\Controllers\DeleteDomainController
- *
- * @group current
  */
 class DeleteDomainControllerTest extends TestCase
 {
