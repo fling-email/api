@@ -5,17 +5,22 @@ FROM php:8.1.1-apache AS base
 
 WORKDIR /var/www
 
+# Set timezone to be UTC
 ENV TZ=UTC
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
  && echo $TZ > /etc/timezone
 
+# Install tools we need to do below steps
+RUN apt-get -y update \
+ && apt-get -y install wget \
+ && rm -R /var/lib/apt
+
 # Add helper script to make installing php extensions easier
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.8/install-php-extensions /usr/local/bin/
-RUN chmod 0755 /usr/local/bin/install-php-extensions
+RUN wget -O /usr/local/bin/install-php-extensions https://github.com/mlocati/docker-php-extension-installer/releases/download/1.4.12/install-php-extensions \
+ && chmod 0755 /usr/local/bin/install-php-extensions
 
 # Install PHP extensions we need
-RUN apt-get update -y \
- && install-php-extensions \
+RUN install-php-extensions \
     intl \
     pdo_mysql
 

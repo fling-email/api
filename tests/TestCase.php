@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use Laravel\Lumen\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\DB;
 use App\Application;
+use App\Models\Model;
 use App\Models\User;
 
 abstract class TestCase extends BaseTestCase
@@ -171,7 +173,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return $this
      */
-    public function seeResponseStatus(int $expected_status, ?string $expected_message = null): self
+    protected function seeResponseStatus(int $expected_status, ?string $expected_message = null): self
     {
         $this->assertSame(
             $expected_status,
@@ -185,6 +187,37 @@ abstract class TestCase extends BaseTestCase
                 $this->response->original["message"] ?? "",
             );
         }
+
+        return $this;
+    }
+
+    /**
+     * Asserts that a model exists and is soft deleted in the database
+     *
+     * @param Model $model The model to check
+     *
+     * @return $this
+     */
+    protected function seeSoftDeleted(Model $model): static
+    {
+        $result = DB::table($model->getTable())
+            ->select(["deleted_at"])
+            ->where($model->getKeyName(), $model->getKey())
+            ->first();
+
+        $model_id_desc = $model->getKeyName() . "=" . $model->getKey();
+
+        if ($result === null) {
+            $this->assertTrue(
+                false,
+                "Model with {$model_id_desc} not found",
+            );
+        }
+
+        $this->assertNotNull(
+            $result->deleted_at,
+            "Model with {$model_id_desc} is not deleted",
+        );
 
         return $this;
     }

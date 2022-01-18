@@ -28,4 +28,23 @@ class DomainPolicy extends Policy
             ? Response::allow()
             : Response::deny("You do not have permission to verify this domain");
     }
+
+    /**
+     * Checks if a user is allowed to delete a domain
+     *
+     * @param User $user The user trying to delete the domain
+     * @param ?Domain $domain The domain being delete
+     *
+     * @return Response
+     */
+    public function delete(User $user, ?Domain $domain): Response
+    {
+        $can_delete = $domain !== null
+            && $user->organisation_id === $domain->organisation_id
+            && $user->hasPermission("delete_domain");
+
+        return ($can_delete)
+            ? Response::allow()
+            : Response::deny("You do not have permission to delete this domain");
+    }
 }

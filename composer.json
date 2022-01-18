@@ -44,6 +44,8 @@
     "prefer-stable": true,
     "scripts": {
         "lint": "phpcs --standard=ruleset.xml -p -s",
-        "analyse": "phan"
+        "analyse": "phan",
+        "test:unit": "build_scripts/test_exec.sh php vendor/bin/phpunit --stop-on-failure --testsuite unit --no-coverage",
+        "test:functional": "build_scripts/test_exec.sh php vendor/bin/phpunit --stop-on-failure --testsuite functional --no-coverage"
     }
 }
