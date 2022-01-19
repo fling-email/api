@@ -18,14 +18,7 @@ class CreateEmailsTable extends Migration
     {
         Schema::create("recipients", function (Blueprint $table) {
             $table->id();
-            $table->string("email_address");
-        });
-
-        Schema::create("email_recipients", function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("recipient_id");
-            $table->foreignId("email_id");
-            $table->enum("type", ["to", "cc", "bcc"]);
+            $table->string("email_address")->unique();
         });
 
         Schema::create("attachments", function (Blueprint $table) {
@@ -33,6 +26,8 @@ class CreateEmailsTable extends Migration
             $table->string("name");
             $table->string("type");
             $table->bigInteger("size");
+            $table->string("md5");
+            $table->string("sha1");
         });
 
         DB::statement("ALTER TABLE attachments ADD data LONGBLOB");
@@ -46,8 +41,19 @@ class CreateEmailsTable extends Migration
             $table->longText("message_plain");
             $table->longText("message_html");
             $table->longText("message_mjml");
+        });
 
-            // attachments
+        Schema::create("email_recipients", function (Blueprint $table) {
+            $table->id();
+            $table->foreignId("recipient_id");
+            $table->foreignId("email_id");
+            $table->enum("type", ["to", "cc", "bcc"]);
+        });
+
+        Schema::create("email_attachments", function (Blueprint $table) {
+            $table->id();
+            $table->foreignId("email_id");
+            $table->foreignId("attachment_id");
         });
     }
 
@@ -58,9 +64,10 @@ class CreateEmailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists("emails");
-        Schema::dropIfExists("attachments");
+        Schema::dropIfExists("email_attachments");
         Schema::dropIfExists("email_recipients");
+        Schema::dropIfExists("attachments");
         Schema::dropIfExists("recipients");
+        Schema::dropIfExists("emails");
     }
 }
