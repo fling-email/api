@@ -60,7 +60,7 @@ class SchemaValidator
     private function validateRequestSchema(string $controller_class, Request $request): void
     {
         // Only validate requests that should have a body
-        if (!Arr::has(["post", "patch", "put"], $controller_class::$method)) {
+        if (!\in_array($controller_class::$method, ["post", "patch", "put"], true)) {
             return;
         }
 

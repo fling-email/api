@@ -18,7 +18,7 @@ class CreateUserController extends Controller
     public static bool $paginated = false;
 
     /**
-     * Handles requests to crate new user accounts
+     * Handles requests to create new user accounts
      *
      * @param Request $request The request
      *
