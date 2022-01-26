@@ -47,6 +47,24 @@
                 },
                 {
                     "properties": {
+                        "mjml": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["mjml"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "html": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["html"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
                         "plain": {
                             "type": "string"
                         },

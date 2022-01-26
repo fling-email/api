@@ -1,5 +1,6 @@
 # 3rd party
 /vendor
+/node_modules
 
 # Private files
 /.env

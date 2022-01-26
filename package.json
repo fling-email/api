@@ -1,0 +1,7 @@
+{
+    "name": "@fling/api",
+    "license": "GPL-3.0-only",
+    "dependencies": {
+        "mjml": "^4.12.0"
+    }
+}
