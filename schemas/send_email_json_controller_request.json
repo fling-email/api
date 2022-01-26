@@ -46,6 +46,18 @@
                     "type": "string"
                 }
             },
+            "oneOf": [
+                {
+                    "required": [
+                        "html"
+                    ]
+                },
+                {
+                    "required": [
+                        "mjml"
+                    ]
+                }
+            ],
             "additionalProperties": false
         },
         "attachments": {
