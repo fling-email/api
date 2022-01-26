@@ -35,30 +35,41 @@
         },
         "message": {
             "type": "object",
-            "properties": {
-                "plain": {
-                    "type": "string"
-                },
-                "html": {
-                    "type": "string"
-                },
-                "mjml": {
-                    "type": "string"
-                }
-            },
             "oneOf": [
                 {
-                    "required": [
-                        "html"
-                    ]
+                    "properties": {
+                        "plain": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["plain"],
+                    "additionalProperties": false
                 },
                 {
-                    "required": [
-                        "mjml"
-                    ]
+                    "properties": {
+                        "plain": {
+                            "type": "string"
+                        },
+                        "html": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["plain", "html"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "plain": {
+                            "type": "string"
+                        },
+                        "mjml": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["plain", "mjml"],
+                    "additionalProperties": false
                 }
-            ],
-            "additionalProperties": false
+            ]
         },
         "attachments": {
             "type": "array",
