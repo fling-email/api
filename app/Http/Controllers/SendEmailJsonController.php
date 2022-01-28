@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Models\Email;
-use App\Traits\CompilesMjMl;
+use App\Traits\CompilesMjml;
 
 class SendEmailJsonController extends Controller
 {
-    use CompilesMjMl;
+    use CompilesMjml;
 
     public static ?string $method = "post";
     public static ?string $path = "/emails/json";

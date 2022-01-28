@@ -24,6 +24,13 @@ RUN install-php-extensions \
     intl \
     pdo_mysql
 
+# Install command line tools needed by the app
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+RUN apt-get -y update \
+ && apt-get -y install \
+    nodejs \
+ && rm -R /var/lib/apt
+
 # Configure PHP and Apache
 ADD docker/apache2.conf /etc/apache2/apache2.conf
 ADD docker/php.ini /usr/local/etc/php/php.ini
