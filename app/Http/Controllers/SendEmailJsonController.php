@@ -9,6 +9,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Models\Email;
 use App\Traits\CompilesMjml;
+use PHPMailer\PHPMailer\PHPMailer;
 
 class SendEmailJsonController extends Controller
 {
@@ -55,6 +56,6 @@ class SendEmailJsonController extends Controller
      */
     private function convertToPlain(string $html): string
     {
-        //
+        return (new PHPMailer())->html2text($html);
     }
 }
