@@ -47,4 +47,23 @@ class DomainPolicy extends Policy
             ? Response::allow()
             : Response::deny("You do not have permission to delete this domain");
     }
+
+    /**
+     * Checks if a user is allowed to send emails from users at a domain
+     *
+     * @param User $user The user trying to send the email
+     * @param ?Domain $domain The domain the email is being sent from
+     *
+     * @return Response
+     */
+    public function sendEmail(User $user, ?Domain $domain): Response
+    {
+        $can_send = $domain !== null
+            && $user->organisation_id === $domain->organisation_id
+            && $user->hasPermission("send_email");
+
+        return ($can_send)
+            ? Response::allow()
+            : Response::deny("You do not have permission to send emails from this domain");
+    }
 }

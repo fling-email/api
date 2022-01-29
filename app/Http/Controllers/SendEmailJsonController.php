@@ -7,7 +7,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 use App\Models\Email;
+use App\Models\Domain;
 use App\Traits\CompilesMjml;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -25,11 +27,37 @@ class SendEmailJsonController extends Controller
      */
     public function __invoke(): JsonResponse|Response
     {
+        $from_domain_name = Str::after($this->request->json("from_email"), "@");
+
+        $from_domain = Domain::query()
+            ->where("name", $from_domain_name)
+            ->first();
+
+        $this->authorize("send_email", [Domain::class, $from_domain]);
+
         $email_html = $this->getEmailHtml();
         $email_plain = $this->request->json(
             "message.plain",
             $this->convertToPlain($email_html),
         );
+
+        $to_addresses = \collect($this->request->json("to", []));
+        $cc_addresses = \collect($this->request->json("cc", []));
+        $bcc_addresses = \collect($this->request->json("bcc", []));
+
+        $email = new Email();
+
+        $email->from_name = $this->request->json("from_name");
+        $email->from_email = $this->request->json("from_email");
+        $email->subject = $this->request->json("subject");
+        $email->message_plain = $email_plain;
+        $email->message_html = $email_html;
+        $email->message_mjml = $this->request->json("message.mjml", null);
+
+        $email->save();
+        $email->refresh();
+
+        $email->sendTo($to_addresses, $cc_addresses, $bcc_addresses);
 
         return \response("", 204);
     }
