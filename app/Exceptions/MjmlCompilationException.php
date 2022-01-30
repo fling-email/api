@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 class MjmlCompilationException extends AppException
@@ -9,7 +11,8 @@ class MjmlCompilationException extends AppException
      *
      * @return integer
      */
-    public function status(): int {
+    public function status(): int
+    {
         return 500;
     }
 }

@@ -9,13 +9,12 @@ use App\Traits\CompilesMjml;
 
 /**
  * @covers App\Traits\CompilesMjml
- * @group current
  */
 class CompilesMjmlTest extends TestCase
 {
     private function getCompiler()
     {
-        return new class() {
+        return new class () {
             use CompilesMjml;
 
             public function compile(string $mjml): string
