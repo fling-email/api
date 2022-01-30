@@ -12,11 +12,7 @@ use App\Traits\CompilesMjml;
  */
 class CompilesMjmlTest extends TestCase
 {
-    /**
-     * We can't put a return type on this method
-     * @phan-suppress PhanPluginUnknownMethodReturnType
-     */
-    private function getCompiler()
+    private function compileMjmlString(string $input): string
     {
         $compiler = new class () {
             use CompilesMjml;
@@ -27,10 +23,7 @@ class CompilesMjmlTest extends TestCase
             }
         };
 
-        // Keeps Phan happy
-        \assert($compiler instanceof CompilesMjml);
-
-        return $compiler;
+        return $compiler->compile($input);
     }
 
     public function testCompile(): void
@@ -49,7 +42,7 @@ class CompilesMjmlTest extends TestCase
             </mjml>
             MJML;
 
-        $result = $this->getCompiler()->compile($mjml);
+        $result = $this->compileMjmlString($mjml);
 
         $this->assertIsString($result);
         $this->assertNotEmpty($result);
