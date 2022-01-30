@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use App\Models\Email;
 
 class SendEmailController extends Controller
 {
@@ -23,6 +22,7 @@ class SendEmailController extends Controller
      */
     public function __invoke(Request $request): JsonResponse|Response
     {
-        //
+        // TODO
+        return \response("", 501);
     }
 }

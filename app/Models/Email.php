@@ -55,6 +55,9 @@ class Email extends Model
 
         Recipient::insert(
             $missing_addresses->map(
+                /**
+                 * @phan-return array<string, mixed>
+                 */
                 fn (string $address): array => [
                     "email_address" => $address,
                 ]
@@ -73,7 +76,7 @@ class Email extends Model
      * Links a list of recipients to this email
      *
      * @param Collection $recipients The list of recipients
-     * @param string The type of recipient for this message; to, cc or bcc
+     * @param string $type The type of recipient for this message; to, cc or bcc
      *
      * @return void
      */
@@ -81,6 +84,9 @@ class Email extends Model
     {
         EmailRecipient::insert(
             $recipients->map(
+                /**
+                 * @phan-return array<string, mixed>
+                 */
                 fn (Recipient $recipient): array => [
                     "recipient_id" => $recipient->id,
                     "email_id" => $this->id,
