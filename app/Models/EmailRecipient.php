@@ -10,6 +10,17 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class EmailRecipient extends Model
 {
     /**
+     * @var string[]
+     */
+    protected $fillable = [
+        "recipient_id",
+        "email_id",
+        "type",
+    ];
+
+    public $timestamps = false;
+
+    /**
      * Gets the relation to the email
      *
      * @return BelongsTo

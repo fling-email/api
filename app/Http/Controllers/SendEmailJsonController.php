@@ -10,6 +10,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use App\Models\Email;
 use App\Models\Domain;
+use App\Models\Attachment;
+use App\Models\EmailAttachment;
 use App\Traits\CompilesMjml;
 use PHPMailer\PHPMailer\PHPMailer;
 
@@ -33,7 +35,7 @@ class SendEmailJsonController extends Controller
             ->where("name", $from_domain_name)
             ->first();
 
-        $this->authorize("send_email", [Domain::class, $from_domain]);
+        $this->authorize("sendEmail", [Domain::class, $from_domain]);
 
         $email_html = $this->getEmailHtml();
         $email_plain = $this->request->json(
@@ -56,6 +58,36 @@ class SendEmailJsonController extends Controller
 
         $email->save();
         $email->refresh();
+
+        foreach ($this->request->json("attachments", []) as $attachment_input) {
+            \settype($attachment_input, "object");
+
+            $attachment = new Attachment();
+
+            $raw_data = \base64_decode($attachment_input->data);
+
+            $finfo = new \finfo(\FILEINFO_MIME_TYPE);
+            $mime_type = $finfo->file(
+                "data:text/plain;base64," . \base64_encode($raw_data),
+                \FILEINFO_MIME_TYPE,
+            );
+
+            $attachment->name = $attachment_input->name;
+            $attachment->type = $mime_type ?? "application/octet-stream";
+            $attachment->size = \strlen($raw_data);
+            $attachment->md5 = \md5($raw_data);
+            $attachment->sha1 = \sha1($raw_data);
+            $attachment->data = $raw_data;
+
+            $attachment->save();
+
+            $email_attachment = new EmailAttachment();
+
+            $email_attachment->email_id = $email->id;
+            $email_attachment->attachment_id = $attachment->id;
+
+            $email_attachment->save();
+        }
 
         $email->sendTo($to_addresses, $cc_addresses, $bcc_addresses);
 

@@ -26,11 +26,11 @@ class Email extends Model
         $cc_recipients = $this->getOrCreateMissingRecipients($cc_addresses);
         $bcc_recipients = $this->getOrCreateMissingRecipients($bcc_addresses);
 
-        $this->createEmailRecipients($to_addresses, "to");
-        $this->createEmailRecipients($cc_addresses, "cc");
-        $this->createEmailRecipients($bcc_addresses, "bcc");
+        $this->createEmailRecipients($to_recipients, "to");
+        $this->createEmailRecipients($cc_recipients, "cc");
+        $this->createEmailRecipients($bcc_recipients, "bcc");
 
-        // TODO Attachments + queue sending
+        // TODO queue sending
     }
 
     /**
@@ -53,13 +53,17 @@ class Email extends Model
 
         $missing_addresses = $addresses->diff($existing_addresses);
 
-        $new_recipients = Recipient::create(
+        Recipient::insert(
             $missing_addresses->map(
                 fn (string $address): array => [
                     "email_address" => $address,
                 ]
-            )
+            )->toArray()
         );
+
+        $new_recipients = Recipient::query()
+            ->whereIn("email_address", $missing_addresses)
+            ->get();
 
         return \collect($existing_recipients)
             ->merge(\collect($new_recipients));
@@ -75,14 +79,14 @@ class Email extends Model
      */
     private function createEmailRecipients(Collection $recipients, string $type): void
     {
-        EmailRecipient::create(
-            $to_addresses->map(
+        EmailRecipient::insert(
+            $recipients->map(
                 fn (Recipient $recipient): array => [
                     "recipient_id" => $recipient->id,
                     "email_id" => $this->id,
                     "type" => $type,
                 ]
-            )
+            )->toArray()
         );
     }
 }
