@@ -13,19 +13,24 @@ class SendEmailJsonControllerTest extends TestCase
 {
     public function testSend(): void
     {
+        $domain = $this->getTestUser()
+                       ->organisation
+                       ->domains
+                       ->first();
+
         $this->actingAsTestUser()
             ->json("POST", "/emails/json", [
                 "to" => [
-                    "to@fling.email",
+                    "to@{$domain->name}",
                 ],
                 "cc" => [
-                    "cc@fling.email",
+                    "cc@{$domain->name}",
                 ],
                 "bcc" => [
-                    "bcc@fling.email",
+                    "bcc@{$domain->name}",
                 ],
                 "from_name" => "From Name",
-                "from_email" => "from@fling.email",
+                "from_email" => "from@{$domain->name}",
                 "subject" => "An Interesting Email",
                 "message" => [
                     "mjml" => "<mjml><mj-body><mj-section><mj-column><mj-text>Hello World</mj-text></mj-column></mj-section></mj-body></mjml>",

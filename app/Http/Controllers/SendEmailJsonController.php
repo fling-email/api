@@ -90,7 +90,7 @@ class SendEmailJsonController extends Controller
 
         $email->sendTo($to_addresses, $cc_addresses, $bcc_addresses);
 
-        return \response("", 204);
+        return \response("", 201);
     }
 
     /**
