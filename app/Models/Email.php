@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Queue;
+use App\Jobs\DeliverEmail;
 
 class Email extends Model
 {
@@ -30,7 +32,7 @@ class Email extends Model
         $this->createEmailRecipients($cc_recipients, "cc");
         $this->createEmailRecipients($bcc_recipients, "bcc");
 
-        // TODO queue sending
+        \dispatch(new DeliverEmail($this));
     }
 
     /**

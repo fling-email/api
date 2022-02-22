@@ -23,6 +23,6 @@ class DeliverEmail extends Job
      */
     public function handle(): void
     {
-        //
+        // TODO deliver using phpmailer?
     }
 }

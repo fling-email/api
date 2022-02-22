@@ -1,7 +1,7 @@
 ##
 ## Base docker image with common build steps
 ##
-FROM php:8.1.1-apache AS base
+FROM php:8.1.2-apache AS base
 
 WORKDIR /var/www
 
