@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Jobs\DeliverEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
-use App\Jobs\DeliverEmail;
 
 class Email extends Model
 {
@@ -96,5 +97,25 @@ class Email extends Model
                 ]
             )->toArray()
         );
+    }
+
+    /**
+     * Gets the relation to email recipients
+     *
+     * @return HasMany
+     */
+    public function emailRecipients(): HasMany
+    {
+        return $this->hasMany(EmailRecipient::class);
+    }
+
+    /**
+     * Gets the relation to email attachments
+     *
+     * @return HasMany
+     */
+    public function emailAttachments(): HasMany
+    {
+        return $this->hasMany(EmailAttachment::class);
     }
 }

@@ -1,0 +1,22 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      target: app
+    volumes:
+      - .:/var/www
+    ports:
+      - 127.0.0.1:8040:80
+
+  db:
+    image: mariadb:10.8.3
+    environment:
+      MARIADB_ROOT_PASSWORD: secret
+      MARIADB_DATABASE: fling
+      MARIADB_MYSQL_LOCALHOST_USER: "non-empty"
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh", "--connect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
