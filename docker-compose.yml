@@ -8,6 +8,9 @@ services:
       - .:/var/www
     ports:
       - 127.0.0.1:8040:80
+    environment:
+      APACHE_RUN_USER: "#${USER_ID}"
+      APACHE_RUN_GROUP: "#${GROUP_ID}"
 
   db:
     image: mariadb:10.8.3

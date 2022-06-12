@@ -33,7 +33,11 @@ class Email extends Model
         $this->createEmailRecipients($cc_recipients, "cc");
         $this->createEmailRecipients($bcc_recipients, "bcc");
 
-        \dispatch(new DeliverEmail($this));
+        (new DeliverEmail($this))->handle();
+
+        //
+        //
+        //\dispatch(new DeliverEmail($this));
     }
 
     /**
@@ -106,7 +110,11 @@ class Email extends Model
      */
     public function emailRecipients(): HasMany
     {
-        return $this->hasMany(EmailRecipient::class);
+        return $this->hasMany(
+            EmailRecipient::class,
+            "email_id",
+            "id",
+        );
     }
 
     /**
@@ -116,6 +124,10 @@ class Email extends Model
      */
     public function emailAttachments(): HasMany
     {
-        return $this->hasMany(EmailAttachment::class);
+        return $this->hasMany(
+            EmailAttachment::class,
+            "email_id",
+            "id",
+        );
     }
 }

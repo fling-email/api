@@ -37,6 +37,10 @@ class EmailRecipient extends Model
      */
     public function recipient(): HasOne
     {
-        return $this->hasOne(Recipient::class);
+        return $this->hasOne(
+            Recipient::class,
+            "id",
+            "recipient_id",
+        );
     }
 }
