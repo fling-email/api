@@ -58,7 +58,7 @@ class Email extends Model
             fn (Recipient $recipient): string => $recipient->email_address
         );
 
-        $missing_addresses = $addresses->diff($existing_addresses);
+        $missing_addresses = $addresses->diff($existing_addresses)->unique();
 
         Recipient::insert(
             $missing_addresses->map(

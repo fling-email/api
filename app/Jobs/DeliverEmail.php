@@ -6,8 +6,11 @@ namespace App\Jobs;
 
 use App\Models\Email;
 use App\Models\EmailRecipient;
-use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class DeliverEmail extends Job
 {
@@ -53,13 +56,25 @@ class DeliverEmail extends Job
     {
         $mail_servers = $this->getMailServers($domain_name);
 
-        if ($mail_servers->isEmpty()) {
-            // TODO Throw something
-        }
+        $delivery_exceptions = [];
 
         foreach ($mail_servers as $mail_server_hostname) {
-            // TODO Deliver message
+            try {
+                // Try each mail server in order
+                $this->deliverMessageToServer(
+                    $mail_server_hostname,
+                    $email_recipients,
+                );
+
+                // Stop once we deliver the message
+                return;
+            } catch (DeliveryException $exception) {
+                $delivery_exceptions[] = $exception;
+            }
         }
+
+        // If none of the attempts worked throw an exception
+        // throw new SomethingException();
     }
 
     /**
@@ -83,5 +98,74 @@ class DeliverEmail extends Job
         return \collect(\array_combine($weights, $hosts))
             ->sortKeys()
             ->values();
+    }
+
+    /**
+     * Attempts to deliver the message to a mail server
+     *
+     * @param string $mail_server_hostname The server to connect to
+     * @param Collection $email_recipients All recipients @ a domain that uses this server
+     *
+     * @return void
+     */
+    private function deliverMessageToServer(string $mail_server_hostname, Collection $email_recipients): void
+    {
+        $mailer = new PHPMailer(exceptions: true);
+
+        $mailer->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mailer->isSMTP();
+        $mailer->Host = $this->getPhpMailerHostString($mail_server_hostname);
+        $mailer->SMTPAutoTLS = true;
+        $mailer->isHTML(true);
+
+        $mailer->Subject = $this->email->subject;
+        $mailer->Body = $this->email->message_html;
+        $mailer->AltBody = $this->email->message_plain;
+
+        foreach ($email_recipients as $email_recipient) {
+            $type = $email_recipient->type;
+            $email_address = $email_recipient->recipient->email_address;
+
+            if ($type === "to") {
+                $mailer->addAddress($email_address);
+            } else if ($type === "cc") {
+                $mailer->addCC($email_address);
+            } else if ($type === "bcc") {
+                $mailer->addBCC($email_address);
+            } else {
+                // TODO throw new InvalidType???
+            }
+        }
+
+        foreach ($this->email->emailAttachments as $email_attachment) {
+            $attachment = $email_attachment->attachment;
+
+            // TODO 2 \/
+        }
+
+        // TODO:
+        //  1. Get correct message parts
+        //  2. Add attachments, including cid: images inline
+        //  3. DKIM sign if we can
+        //  4. Store SMTP logs somewhere
+
+        $mailer->send();
+    }
+
+    /**
+     * Gets a string suitable for the PHPMailer::$Host property.
+     *
+     * We try all of the common SMTP ports in order to try and improve delivery
+     * rates to old/weird server.
+     *
+     * @param string $mail_server_hostname The hostname to prepare the string for
+     *
+     * @return string
+     */
+    private function getPhpMailerHostString(string $mail_server_hostname): string
+    {
+        return \collect([587, 25, 465, 2525])
+            ->map(fn (int $port): string => "{$mail_server_hostname}:{$port}")
+            ->join(";");
     }
 }
